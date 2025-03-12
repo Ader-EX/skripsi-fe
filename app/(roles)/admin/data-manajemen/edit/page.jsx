@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -16,8 +17,10 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const EditTimetable = () => {
   const router = useRouter();
-  const searchParams = window !== "undefined" ? useSearchParams() : null;
-  const timetableId = searchParams ? searchParams.get("id") : null;
+  const searchParams = useSearchParams();
+
+  // ✅ Get 'id' param from URL
+  const timetableId = searchParams.get("id");
 
   const [selectedOpenedClass, setSelectedOpenedClass] = useState(null);
   const [selectedRuangan, setSelectedRuangan] = useState(null);

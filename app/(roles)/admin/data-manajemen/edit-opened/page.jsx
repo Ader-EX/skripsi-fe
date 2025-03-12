@@ -18,15 +18,15 @@ import { Pencil, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 import DosenSelectionDialog from "@/components/global/DosenSelectionDialog";
-import MatakuliahSelectionDialog from "@/components/global/MatakuliahSelectionDialog";
+import MatakuliahSelectionDialog from "@/components/global/MataKuliahSelectionDialog";
 import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const EditOpenedClass = () => {
   const router = useRouter();
-  const searchParams = window !== "undefined" ? useSearchParams() : null;
-  const classId = searchParams ? searchParams.get("id") : null; // Check if it's PUT mode
+  const searchParams = useSearchParams();
+  const classId = searchParams.get("id");
 
   const [selectedMataKuliah, setSelectedMataKuliah] = useState(null);
   const [selectedDosen, setSelectedDosen] = useState([]);

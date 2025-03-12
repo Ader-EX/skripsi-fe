@@ -2,7 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import newImage from "@/public/login.jpg";
 import toast from "react-hot-toast";
 import useAuthStore from "@/hooks/useAuthStore";
 import Link from "next/link";
@@ -17,8 +16,10 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm();
+
   const { setAuth } = useAuthStore();
   const router = useRouter();
+
   const onSubmit = async (data) => {
     toast.loading("Logging in...");
 
@@ -37,7 +38,9 @@ const Login = () => {
           }),
         }
       );
+
       const result = await response.json();
+
       if (response.ok) {
         toast.dismiss();
         toast.success("Login successful!");
@@ -45,6 +48,8 @@ const Login = () => {
         Cookies.set("access_token", result.access_token);
         Cookies.set("token_type", result.token_type);
         Cookies.set("role", result.role);
+
+        setAuth(result.access_token, result.token_type, result.role);
         router.push(`/${result.role}/dashboard`);
       } else {
         toast.dismiss();
@@ -52,26 +57,27 @@ const Login = () => {
       }
     } catch (error) {
       toast.dismiss();
-      console.log(error.detail || "Invalid credentials");
+      console.error(error);
       toast.error("Something went wrong. Please try again.");
     }
   };
+
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       {/* Left: Image */}
       <div className="w-1/2 h-screen hidden lg:block relative">
-        <div className=" h-full absolute bg-primary w-full opacity-40"></div>
+        <div className="h-full absolute bg-primary w-full opacity-40"></div>
         <Image
-          src={newImage}
-          alt="Placeholder Image"
-          width={800}
-          height={600}
-          className="object-cover w-full h-full"
+          src="/login.jpg" // ✅ Public folder image
+          alt="Login Image"
+          fill
+          style={{ objectFit: "cover" }}
+          priority
         />
       </div>
 
       {/* Right: Login Form */}
-      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+      <div className="lg:p-36 md:p-52 sm:p-20 p-8 w-full lg:w-1/2">
         <Link href="/">
           <h1 className="text-2xl font-bold text-primary flex gap-x-2 mb-4">
             <Timer className="self-center" />
@@ -80,7 +86,8 @@ const Login = () => {
         </Link>
 
         <h1 className="text-2xl font-semibold mb-4">Login</h1>
-        <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
           {/* Username Input */}
           <div className="mb-4">
             <label htmlFor="username" className="block text-gray-600">
@@ -89,11 +96,13 @@ const Login = () => {
             <input
               type="text"
               id="username"
-              name="username"
               {...register("username", { required: true })}
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               autoComplete="off"
             />
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">Username is required</p>
+            )}
           </div>
 
           {/* Password Input */}
@@ -104,37 +113,25 @@ const Login = () => {
             <input
               type="password"
               id="password"
-              name="password"
               {...register("password", { required: true })}
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               autoComplete="off"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">Password is required</p>
+            )}
           </div>
-          {/* 
-          <div className="mb-4 flex items-center">
-            <input
-              type="checkbox"
-              id="remember"
-              name="remember"
-              {...register("remember")}
-              className="text-blue-500"
-            />
-            <label htmlFor="remember" className="text-gray-600 ml-2">
-              Remember Me
-            </label>
-          </div>  */}
 
           {/* Forgot Password Link */}
-          <div className="mb-6 text-blue-500">
-            <a href="#" className="hover:underline">
-              Forgot Password
+          <div className="mb-6 text-blue-500 text-right">
+            <a href="#" className="hover:underline text-sm">
+              Forgot Password?
             </a>
           </div>
 
           {/* Login Button */}
           <button
             type="submit"
-            disabled={watch("remember") && !errors.username && !errors.password}
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
           >
             Login

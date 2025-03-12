@@ -1,3 +1,17 @@
 {
-  "extends": ["next/babel", "next/core-web-vitals"]
+  "extends": ["next/core-web-vitals"],
+  "plugins": ["import"],
+  "rules": {
+    "import/no-unresolved": "error",
+    "@next/next/no-html-link-for-pages": "error",
+    "import/no-case-sensitive-paths": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [["@", "./"]],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
 }
