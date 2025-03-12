@@ -22,7 +22,7 @@ import {
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/algorithm/formatted-timetable/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/algorithm/formatted-timetable`;
 
 const TimeTableDashboardReadOnly = () => {
   const [scheduleList, setScheduleList] = useState([]);
