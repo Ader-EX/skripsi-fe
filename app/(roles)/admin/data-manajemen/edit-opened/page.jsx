@@ -135,7 +135,7 @@ const EditOpenedClass = () => {
       const method = classId ? "PUT" : "POST";
       const url = classId
         ? `${API_URL}/opened-class/${classId}`
-        : `${API_URL}/opened-class`;
+        : `${API_URL}/opened-class/`;
 
       const response = await fetch(url, {
         method,

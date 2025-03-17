@@ -171,7 +171,7 @@ const MataKuliahManagement = () => {
           />
 
           {/* Optional Pagination Buttons */}
-          <div className="flex justify-between items-center mt-4">
+          {/* <div className="flex justify-between items-center mt-4">
             <Button
               disabled={page === 1}
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
@@ -195,7 +195,7 @@ const MataKuliahManagement = () => {
               Selanjutnya
               <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
 

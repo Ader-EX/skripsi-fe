@@ -128,7 +128,7 @@ const AppSidebar = () => {
     <Sidebar className="bg-sidebar text-sidebar-foreground min-h-screen w-64 border-r border-sidebar-border">
       <SidebarHeader className="p-4">
         <Link href="/">
-          <h1 className="text-2xl font-bold text-primary flex gap-x-2 items-center">
+          <h1 className="text-2xl font-bold text-green-700 flex gap-x-2 items-center">
             {/* <Timer /> */}
             <Image src={logoUPN} alt="UPNVJ" width={40} height={40} />
             <span>GenPlan</span>

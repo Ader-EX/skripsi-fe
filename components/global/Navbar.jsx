@@ -74,7 +74,7 @@ export default function Navbar() {
               <>
                 {/* Dashboard Button */}
                 <Link href={dashboardUrl}>
-                  <button className="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/80 transition">
+                  <button className="bg-green-700 text-white py-2 px-4 rounded-md hover:bg-primary/80 transition">
                     Go to Dashboard
                   </button>
                 </Link>

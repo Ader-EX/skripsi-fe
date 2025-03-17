@@ -78,7 +78,7 @@ const RuanganManagement = () => {
   // ✅ Handle delete action
   const handleDelete = async (kode_ruangan) => {
     try {
-      const response = await fetch(`${API_URL}/${kode_ruangan}`, {
+      const response = await fetch(`${API_URL}${kode_ruangan}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
