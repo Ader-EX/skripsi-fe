@@ -1,15 +1,18 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Book, Plus } from "lucide-react";
+import { Book, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import MataKuliahTable from "./MataKuliahTable";
 import MataKuliahForm from "./MataKuliahForm";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// ✅ Directly define the API URL with the endpoint
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/matakuliah`;
+const PROGRAM_STUDI_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi`;
 
 const MataKuliahManagement = () => {
   const [matakuliah, setMatakuliah] = useState([]);
@@ -28,82 +31,105 @@ const MataKuliahManagement = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [currentMataKuliah, setCurrentMataKuliah] = useState(null);
   const token = Cookies.get("access_token");
+
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
   useEffect(() => {
     fetchMataKuliah();
-    fetchProgramStudi();
   }, [filters, page, pageSize]);
 
+  useEffect(() => {
+    fetchProgramStudi();
+  }, []);
+
+  // ✅ Fetch MataKuliah data
   const fetchMataKuliah = async () => {
     try {
       setOverlayText("Memuat data mata kuliah...");
       setIsActive(true);
-      let url = `${API_URL}/matakuliah?page=${page}&page_size=${pageSize}`;
-      const queryParams = new URLSearchParams();
 
-      // Only append semester if it's a valid number and not "Semua"
+      const queryParams = new URLSearchParams({
+        page: page,
+        page_size: pageSize,
+      });
+
+      // Only append filters if they have valid values
       if (filters.semester && filters.semester !== "Semua") {
         queryParams.append("semester", filters.semester);
       }
-      if (filters.kurikulum) queryParams.append("kurikulum", filters.kurikulum);
-      if (filters.status_mk && filters.status_mk !== "Semua")
+      if (filters.kurikulum) {
+        queryParams.append("kurikulum", filters.kurikulum);
+      }
+      if (filters.status_mk && filters.status_mk !== "Semua") {
         queryParams.append("status_mk", filters.status_mk);
-      if (filters.have_kelas_besar && filters.have_kelas_besar !== "Semua")
+      }
+      if (filters.have_kelas_besar && filters.have_kelas_besar !== "Semua") {
         queryParams.append("have_kelas_besar", filters.have_kelas_besar);
-      if (filters.search) queryParams.append("search", filters.search);
-
-      if (queryParams.toString()) {
-        url += `&${queryParams.toString()}`;
+      }
+      if (filters.search) {
+        queryParams.append("search", filters.search);
       }
 
-      const response = await fetch(url, {
+      const response = await fetch(`${API_URL}?${queryParams.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!response.ok) throw new Error("Failed to fetch Mata Kuliah");
+
       const data = await response.json();
-      setMatakuliah(data.data);
-      setTotal(data.total);
+      setMatakuliah(data.data || []);
+      setTotal(data.total || 0);
     } catch (error) {
-      console.error("Error fetching matakuliah:", error);
+      console.error("Error fetching Mata Kuliah:", error);
+      toast.error("Gagal memuat data mata kuliah");
     } finally {
       setIsActive(false);
     }
   };
 
+  // ✅ Fetch Program Studi data
   const fetchProgramStudi = async () => {
     try {
-      setOverlayText("Memuat data...");
+      setOverlayText("Memuat data program studi...");
       setIsActive(true);
-      const response = await fetch(`${API_URL}/program-studi`, {
+
+      const response = await fetch(PROGRAM_STUDI_URL, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!response.ok) throw new Error("Failed to fetch Program Studi");
+
       const data = await response.json();
-      setProgramStudi(data);
+      setProgramStudi(data || []);
     } catch (error) {
-      console.error("Error fetching program studi:", error);
+      console.error("Error fetching Program Studi:", error);
+      toast.error("Gagal memuat data program studi");
     } finally {
       setIsActive(false);
     }
   };
 
+  // ✅ Delete Mata Kuliah by kode
   const handleDeleteConfirm = async (kodemk) => {
     try {
-      const response = await fetch(`${API_URL}/matakuliah/${kodemk}`, {
+      const response = await fetch(`${API_URL}/${kodemk}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.ok) {
-        toast.success("MataKuliah deleted successfully");
-        fetchMataKuliah();
-      } else {
-        throw new Error("Failed to delete MataKuliah");
+
+      if (!response.ok) {
+        throw new Error("Failed to delete Mata Kuliah");
       }
+
+      toast.success("Mata Kuliah berhasil dihapus");
+      fetchMataKuliah();
     } catch (error) {
-      console.error("Error deleting MataKuliah:", error);
-      toast.error("Error deleting MataKuliah");
+      console.error("Error deleting Mata Kuliah:", error);
+      toast.error("Gagal menghapus mata kuliah");
     }
   };
 
+  // ✅ Open form for add/edit
   const handleOpenForm = (matakuliah = null) => {
     setCurrentMataKuliah(matakuliah);
     setIsEdit(!!matakuliah);
@@ -128,9 +154,8 @@ const MataKuliahManagement = () => {
             </Button>
           </CardTitle>
         </CardHeader>
+
         <CardContent>
-          {/* Replace MataKuliahTable with your table component */}
-          {/* Pass necessary props */}
           <MataKuliahTable
             matakuliah={matakuliah}
             total={total}
@@ -144,9 +169,37 @@ const MataKuliahManagement = () => {
             handleEdit={handleOpenForm}
             fetchMataKuliah={fetchMataKuliah}
           />
+
+          {/* Optional Pagination Buttons */}
+          <div className="flex justify-between items-center mt-4">
+            <Button
+              disabled={page === 1}
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              className="flex items-center"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Sebelumnya
+            </Button>
+            <span className="text-sm">
+              Halaman {page} dari {Math.ceil(total / pageSize) || 1}
+            </span>
+            <Button
+              disabled={page >= Math.ceil(total / pageSize)}
+              onClick={() =>
+                setPage((prev) =>
+                  Math.min(prev + 1, Math.ceil(total / pageSize))
+                )
+              }
+              className="flex items-center"
+            >
+              Selanjutnya
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
+      {/* Form Modal */}
       <MataKuliahForm
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

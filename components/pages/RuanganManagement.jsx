@@ -1,15 +1,17 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Plus } from "lucide-react";
+import { Building2, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import RuanganTable from "./RuanganTable";
 import RuanganForm from "./RuanganForm";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// ✅ Define the base API URL with endpoint prefix
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ruangan`;
 
 const RuanganManagement = () => {
   const [ruangan, setRuangan] = useState([]);
@@ -27,59 +29,77 @@ const RuanganManagement = () => {
   const [currentRuangan, setCurrentRuangan] = useState(null);
   const token = Cookies.get("access_token");
 
-  // Get loading overlay functions from context
+  // Overlay context for loading state
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
+  // Fetch ruangan data when filters/page/pageSize change
   useEffect(() => {
     fetchRuangan();
   }, [filters, page, pageSize]);
 
+  // ✅ Fetch ruangan data
   const fetchRuangan = async () => {
     try {
-      // Show loading overlay with custom text
       setOverlayText("Memuat data ruangan...");
       setIsActive(true);
-      let url = `${API_URL}/ruangan?page=${page}&page_size=${pageSize}`;
-      const queryParams = new URLSearchParams(filters);
-      url += `&${queryParams.toString()}`;
 
-      const response = await fetch(url, {
+      const queryParams = new URLSearchParams({
+        page: page,
+        page_size: pageSize,
+        ...filters,
+      });
+
+      const response = await fetch(`${API_URL}?${queryParams.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!response.ok) throw new Error("Failed to fetch ruangan");
+
       const data = await response.json();
-      setRuangan(data.data);
-      setTotal(data.total);
+      setRuangan(data.data || []);
+      setTotal(data.total || 0);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching ruangan:", error);
+      toast.error("Gagal memuat data ruangan");
       setLoading(false);
     } finally {
-      // Hide the loading overlay regardless of success/failure
       setIsActive(false);
     }
   };
 
+  // ✅ Handle edit action
   const handleEdit = (room) => {
     setCurrentRuangan(room);
     setIsEdit(true);
     setIsDialogOpen(true);
   };
 
+  // ✅ Handle delete action
   const handleDelete = async (kode_ruangan) => {
     try {
-      const response = await fetch(`${API_URL}/ruangan/${kode_ruangan}`, {
+      const response = await fetch(`${API_URL}/${kode_ruangan}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.ok) {
-        toast.success("Ruangan berhasil dihapus");
-        fetchRuangan();
-      } else {
-        toast.error("Failed to delete ruangan");
+
+      if (!response.ok) {
+        throw new Error("Failed to delete ruangan");
       }
+
+      toast.success("Ruangan berhasil dihapus");
+      fetchRuangan();
     } catch (error) {
-      toast.error("Error deleting ruangan:", error);
+      console.error("Error deleting ruangan:", error);
+      toast.error("Gagal menghapus ruangan");
     }
+  };
+
+  // ✅ Open form for add/edit ruangan
+  const handleOpenForm = () => {
+    setIsEdit(false);
+    setCurrentRuangan(null);
+    setIsDialogOpen(true);
   };
 
   return (
@@ -92,11 +112,7 @@ const RuanganManagement = () => {
               <span>Manajemen Ruangan</span>
             </div>
             <Button
-              onClick={() => {
-                setIsEdit(false);
-                setCurrentRuangan(null);
-                setIsDialogOpen(true);
-              }}
+              onClick={handleOpenForm}
               className="bg-primary hover:bg-primary/90"
             >
               <Plus className="mr-2 h-4 w-4" />
@@ -119,9 +135,37 @@ const RuanganManagement = () => {
             handleEdit={handleEdit}
             handleDelete={handleDelete}
           />
+
+          {/* Pagination */}
+          <div className="flex justify-between items-center mt-4">
+            <Button
+              disabled={page === 1}
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              className="flex items-center"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Sebelumnya
+            </Button>
+            <span className="text-sm">
+              Halaman {page} dari {Math.ceil(total / pageSize) || 1}
+            </span>
+            <Button
+              disabled={page >= Math.ceil(total / pageSize)}
+              onClick={() =>
+                setPage((prev) =>
+                  Math.min(prev + 1, Math.ceil(total / pageSize))
+                )
+              }
+              className="flex items-center"
+            >
+              Selanjutnya
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
+      {/* Form Modal for Add/Edit */}
       <RuanganForm
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
