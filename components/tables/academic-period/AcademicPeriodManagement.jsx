@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/academic-period`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/academic-period/`;
 
 const AcademicPeriodManagement = () => {
   const [academicPeriods, setAcademicPeriods] = useState([]);

@@ -46,7 +46,7 @@ const MahasiswaManagement = () => {
   const [loading, setLoading] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [currentMataKuliah, setCurrentMataKuliah] = useState(null);
+  const [currentMahasiswa, setCurrentMahasiswa] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
@@ -107,13 +107,13 @@ const MahasiswaManagement = () => {
 
   /** Open Form for Adding Mahasiswa */
   const handleAdd = () => {
-    setEditData(null);
+    setCurrentMahasiswa(null);
     setFormOpen(true);
   };
 
   /** Open Form for Editing Mahasiswa */
   const handleEdit = (data) => {
-    setEditData(data);
+    setCurrentMahasiswa(data);
     setFormOpen(true);
   };
 
@@ -227,7 +227,7 @@ const MahasiswaManagement = () => {
           isOpen={formOpen}
           onClose={() => setFormOpen(false)}
           onSubmit={fetchMahasiswa}
-          initialData={editData}
+          initialData={currentMahasiswa}
         />
       </CardContent>
 

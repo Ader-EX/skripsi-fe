@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
 // ✅ Define the base API URL with endpoint prefix
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ruangan`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ruangan/`;
 
 const RuanganManagement = () => {
   const [ruangan, setRuangan] = useState([]);

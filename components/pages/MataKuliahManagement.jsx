@@ -11,8 +11,8 @@ import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
 // ✅ Directly define the API URL with the endpoint
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/matakuliah`;
-const PROGRAM_STUDI_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/matakuliah/`;
+const PROGRAM_STUDI_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi/`;
 
 const MataKuliahManagement = () => {
   const [matakuliah, setMatakuliah] = useState([]);
