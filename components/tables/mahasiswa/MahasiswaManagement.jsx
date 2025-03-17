@@ -61,7 +61,7 @@ const MahasiswaManagement = () => {
     try {
       setOverlayText("Memuat data mahasiswa...");
       setIsActive(true);
-      let url = `${API_URL}/get-all?`;
+      let url = `${API_URL}get-all?`;
       const queryParams = new URLSearchParams();
       if (filters.semester !== "all")
         queryParams.append("semester", filters.semester);

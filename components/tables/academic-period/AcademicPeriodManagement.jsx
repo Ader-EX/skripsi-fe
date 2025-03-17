@@ -59,7 +59,7 @@ const AcademicPeriodManagement = () => {
     try {
       setOverlayText("Memuat periode akademik aktif...");
       setIsActive(true);
-      const response = await fetch(`${API_URL}/active`, {
+      const response = await fetch(`${API_URL}active`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {

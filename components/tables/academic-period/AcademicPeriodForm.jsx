@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/academic-period`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/academic-period/`;
 
 const AcademicPeriodForm = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState(

@@ -91,7 +91,7 @@ const RuanganForm = ({ isOpen, onClose, isEdit, ruangan, fetchRuangan }) => {
       const method = isEdit ? "PUT" : "POST";
       const url = isEdit
         ? `${API_URL}/ruangan/${formData.id}`
-        : `${API_URL}/ruangan`;
+        : `${API_URL}/ruangan/`;
 
       const response = await fetch(url, {
         method,
