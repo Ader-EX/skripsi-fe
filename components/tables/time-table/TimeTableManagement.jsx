@@ -19,7 +19,7 @@ import Cookies from "js-cookie";
 // Import loading overlay hook
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/algorithm/formatted-timetable/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/algorithm/formatted-timetable`;
 
 const TimeTableManagement = () => {
   const router = useRouter();
