@@ -20,7 +20,7 @@ import {
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
-const PROGRAM_STUDI_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi`;
+const PROGRAM_STUDI_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi/`;
 
 // Helper: Convert API date ("dd/mm/yyyy") to input date ("yyyy-mm-dd")
 const convertToInputDateFormat = (dateStr) => {

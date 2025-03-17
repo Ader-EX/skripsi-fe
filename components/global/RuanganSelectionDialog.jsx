@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import Cookies from "js-cookie";
 
-const RUANGAN_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ruangan`;
+const RUANGAN_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ruangan/`;
 
 const RuanganSelectionDialog = ({ isOpen, onClose, onSelect }) => {
   const [searchTerm, setSearchTerm] = useState("");
