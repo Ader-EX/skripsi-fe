@@ -30,11 +30,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import logoUPN from "@/public/LOGO_UPNVJ.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import Image from "next/image";
 
 const AppSidebar = () => {
   const router = useRouter();
@@ -127,7 +129,8 @@ const AppSidebar = () => {
       <SidebarHeader className="p-4">
         <Link href="/">
           <h1 className="text-2xl font-bold text-primary flex gap-x-2 items-center">
-            <Timer />
+            {/* <Timer /> */}
+            <Image src={logoUPN} alt="UPNVJ" width={40} height={40} />
             <span>GenPlan</span>
           </h1>
         </Link>
