@@ -2,19 +2,41 @@ import Navbar from "@/components/global/Navbar";
 import Image from "next/image";
 import Link from "next/link";
 import image from "@/public/hero.png";
-import { Book, Brain } from "lucide-react";
+import logo from "@/public/LOGO_UPNVJ.png";
+import { Book, Brain, School } from "lucide-react";
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-orange-50">
+      <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-red-50">
         <main className="max-w-screen-xl mx-auto px-10 pt-8 pb-8 flex flex-col gap-y-6">
+          {/* University Logo and Badge */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src={logo}
+                alt="Logo UPN Veteran Jakarta"
+                width={80}
+                height={80}
+                className="rounded-full"
+              />
+              <div>
+                <h3 className="text-sm font-bold text-text-primary">
+                  Universitas Pembangunan Nasional
+                </h3>
+                <h4 className="text-sm font-bold text-green-700">
+                  Veteran Jakarta
+                </h4>
+              </div>
+            </div>
+          </div>
+
           <div className="grid lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7">
               <div className="relative">
-                <div className="absolute -left-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-3xl"></div>
-                <div className="absolute right-20 top-10 w-32 h-32 bg-secondary/10 rounded-full blur-3xl"></div>
+                <div className="absolute -left-4 -top-4 w-24 h-24 bg-red-500/10 rounded-full blur-3xl"></div>
+                <div className="absolute right-20 top-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
                 <h1 className="relative text-4xl md:text-5xl xl:text-6xl font-extrabold text-text-primary font-sans">
                   GenPlan: Solusi Penjadwalan Kampus Tanpa Konflik
                 </h1>
@@ -22,13 +44,13 @@ export default function Home() {
               <p className="text-text-secondary mt-6 text-lg font-sans">
                 Optimalisasi jadwal perkuliahan menggunakan algoritma Genetic
                 Algorithm dan Simulated Annealing untuk menciptakan jadwal yang
-                efisien dan bebas dari tumpang tindih.
+                efisien dan bebas dari tumpang tindih di UPN Veteran Jakarta.
               </p>
 
               <div className="mt-8 flex space-x-4">
                 <Link
                   href="/login"
-                  className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground px-6 py-3 rounded-lg hover:from-primary/90 hover:to-primary transition-all duration-300 font-sans"
+                  className="bg-gradient-to-r from-green-500 to-green-700 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-green-500 transition-all duration-300 font-sans"
                 >
                   Login
                 </Link>
@@ -41,7 +63,7 @@ export default function Home() {
               </div>
             </div>
             <div className="hidden lg:block lg:col-span-5">
-              <div className="">
+              <div className="relative">
                 <Image
                   src={image}
                   alt="Ilustrasi GenPlan"
@@ -49,6 +71,18 @@ export default function Home() {
                   height={500}
                   className="rounded-lg"
                 />
+                <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded-lg shadow-md flex items-center gap-2">
+                  <Image
+                    src={logo}
+                    alt="Logo UPN Veteran Jakarta"
+                    width={30}
+                    height={30}
+                    className="rounded-full"
+                  />
+                  <span className="text-xs font-bold text-green-800">
+                    UPN Veteran Jakarta
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -78,7 +112,7 @@ export default function Home() {
                   title: "Optimalisasi Otomatis",
                   description:
                     "Menggunakan algoritma canggih untuk menghasilkan jadwal optimal secara otomatis",
-                  bgClass: "bg-gradient-to-br from-primary to-primary/90",
+                  bgClass: "bg-gradient-to-br from-green-500 to-green-700",
                 },
                 {
                   icon: (
@@ -99,21 +133,14 @@ export default function Home() {
                   title: "Hemat Waktu",
                   description:
                     "Mempercepat proses penyusunan jadwal yang biasanya memakan waktu berhari-hari",
-                  bgClass: "bg-gradient-to-br from-secondary to-secondary/90",
+                  bgClass: "bg-gradient-to-br from-blue-500 to-blue-600",
                 },
                 {
                   icon: <Brain className="h-6 w-6" />,
                   title: "Memudahkan Proses Penjadwalan",
                   description:
                     "Jadwal yang dihasilkan meminimalisir modifikasi secara manual oleh satu pihak",
-                  bgClass: "bg-gradient-to-br from-primary to-primary/90",
-                },
-                {
-                  icon: <Book className="h-6 w-6" />,
-                  title: "Penggunaan Preferensi Dosen",
-                  description:
-                    "Dosen bisa memilih waktu mengajar berdasarkan preferensi waktu mengajar",
-                  bgClass: "bg-gradient-to-br from-secondary to-secondary/90",
+                  bgClass: "bg-gradient-to-br from-green-500 to-green-700",
                 },
               ].map((feature, index) => (
                 <div key={index} className="flex items-start">
@@ -145,7 +172,7 @@ export default function Home() {
               Teknologi yang Kami Gunakan
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-gradient-to-br from-surface via-white to-surface p-6 rounded-lg shadow-lg backdrop-blur-sm">
+              <div className="bg-gradient-to-br from-surface via-white to-surface p-6 rounded-lg shadow-lg backdrop-blur-sm border-t-4 border-green-500">
                 <h3 className="text-xl font-bold text-text-primary mb-4">
                   Genetic Algorithm (GA)
                 </h3>
@@ -155,21 +182,21 @@ export default function Home() {
                 </p>
                 <ul className="space-y-2 text-text-secondary">
                   <li className="flex items-center">
-                    <span className="w-2 h-2 bg-gradient-to-r from-primary to-primary/70 rounded-full mr-2"></span>
+                    <span className="w-2 h-2 bg-gradient-to-r from-green-500 to-red-500 rounded-full mr-2"></span>
                     Representasi kromosom untuk setiap slot jadwal
                   </li>
                   <li className="flex items-center">
-                    <span className="w-2 h-2 bg-gradient-to-r from-primary to-primary/70 rounded-full mr-2"></span>
+                    <span className="w-2 h-2 bg-gradient-to-r from-green-500 to-red-500 rounded-full mr-2"></span>
                     Crossover untuk menggabungkan jadwal-jadwal terbaik
                   </li>
                   <li className="flex items-center">
-                    <span className="w-2 h-2 bg-gradient-to-r from-primary to-primary/70 rounded-full mr-2"></span>
+                    <span className="w-2 h-2 bg-gradient-to-r from-green-500 to-red-500 rounded-full mr-2"></span>
                     Mutasi untuk mengeksplorasi kemungkinan jadwal baru
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gradient-to-br from-surface via-white to-surface p-6 rounded-lg shadow-lg backdrop-blur-sm">
+              <div className="bg-gradient-to-br from-surface via-white to-surface p-6 rounded-lg shadow-lg backdrop-blur-sm border-t-4 border-blue-500">
                 <h3 className="text-xl font-bold text-text-primary mb-4">
                   Simulated Annealing (SA)
                 </h3>
@@ -180,29 +207,36 @@ export default function Home() {
                 </p>
                 <ul className="space-y-2 text-text-secondary">
                   <li className="flex items-center">
-                    <span className="w-2 h-2 bg-gradient-to-r from-secondary to-secondary/70 rounded-full mr-2"></span>
+                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full mr-2"></span>
                     Menyempurnakan hasil dari Genetic Algorithm
                   </li>
                   <li className="flex items-center">
-                    <span className="w-2 h-2 bg-gradient-to-r from-secondary to-secondary/70 rounded-full mr-2"></span>
+                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full mr-2"></span>
                     Menghindari solusi lokal optimal
                   </li>
                   <li className="flex items-center">
-                    <span className="w-2 h-2 bg-gradient-to-r from-secondary to-secondary/70 rounded-full mr-2"></span>
+                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full mr-2"></span>
                     Mengoptimalkan penggunaan ruang dan waktu
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div className="mt-8 bg-gradient-to-br from-surface via-white to-surface p-6 rounded-lg shadow-lg backdrop-blur-sm">
-              <h3 className="text-xl font-bold text-text-primary mb-4">
-                Proses Penjadwalan GenPlan
+            <div className="mt-8 bg-gradient-to-br from-surface via-white to-surface p-6 rounded-lg shadow-lg backdrop-blur-sm border border-gray-200">
+              <h3 className="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
+                <span>Proses Penjadwalan GenPlan</span>
+                <Image
+                  src={logo}
+                  alt="Logo UPN Veteran Jakarta"
+                  width={24}
+                  height={24}
+                  className="rounded-full"
+                />
               </h3>
               <div className="space-y-4 text-text-secondary">
                 <p>
                   GenPlan mengkombinasikan kekuatan GA dan SA dalam proses tiga
-                  tahap:
+                  tahap untuk penjadwalan di UPN Veteran Jakarta:
                 </p>
                 <ol className="space-y-2">
                   {[
@@ -211,13 +245,42 @@ export default function Home() {
                     "Sistem melakukan validasi final untuk memastikan tidak ada konflik jadwal dan semua konstrain terpenuhi",
                   ].map((step, index) => (
                     <li key={index} className="flex items-start">
-                      <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-full flex items-center justify-center mr-2 mt-1">
+                      <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-full flex items-center justify-center mr-2 mt-1">
                         {index + 1}
                       </span>
                       <p>{step}</p>
                     </li>
                   ))}
                 </ol>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer with UPNVJ Banner */}
+          <div className="mt-12 py-4 border-t border-gray-200">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <Image
+                  src={logo}
+                  alt="Logo UPN Veteran Jakarta"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+                <div>
+                  <p className="text-xs font-medium">
+                    Developed By Muhammad Fadhil Musyaffa
+                  </p>
+                  <p className="text-sm font-bold text-green-700">
+                    UPN Veteran Jakarta
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-text-secondary">Powered by</span>
+                <span className="text-xs font-bold bg-gradient-to-r from-green-500 to-blue-500 bg-clip-text text-transparent">
+                  GenPlan
+                </span>
               </div>
             </div>
           </div>

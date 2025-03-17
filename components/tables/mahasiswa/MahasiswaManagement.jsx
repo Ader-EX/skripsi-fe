@@ -26,8 +26,8 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/mahasiswa`;
-const PROGRAM_STUDI_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/mahasiswa/`;
+const PROGRAM_STUDI_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi/`;
 
 const MahasiswaManagement = () => {
   const token = Cookies.get("access_token");
