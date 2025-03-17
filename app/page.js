@@ -33,7 +33,7 @@ export default function Home() {
                   Login
                 </Link>
                 <Link
-                  href="/dokumentasi"
+                  href="#teknologi"
                   className="border border-border bg-white/50 backdrop-blur-sm text-text-primary px-6 py-3 rounded-lg hover:bg-white/80 transition-colors font-sans"
                 >
                   Pelajari Lebih Lanjut
@@ -138,7 +138,10 @@ export default function Home() {
           </div>
 
           <div className="mt-16">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 font-sans">
+            <h2
+              className="text-2xl font-bold text-text-primary mb-6 font-sans"
+              id="teknologi"
+            >
               Teknologi yang Kami Gunakan
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
