@@ -127,7 +127,7 @@ const MahasiswaJadwal = () => {
               onChange={handleSearchChange}
               className="pl-8"
             />
-            <Button onClick={handleSearchSubmit} className="ml-2">
+            <Button onClick={handleSearchSubmit} className="ml-2 bg-green-700">
               <Search className="h-4 w-4 mr-1" /> Search
             </Button>
           </div>

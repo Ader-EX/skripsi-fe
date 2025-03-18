@@ -66,20 +66,20 @@ const Login = () => {
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       {/* Left: Image */}
       <div className="w-1/2 h-screen hidden lg:block relative">
-        <div className="h-full absolute bg-primary w-full opacity-40"></div>
         <Image
-          src="/login.jpg" // ✅ Public folder image
+          src="/login.jpg"
           alt="Login Image"
           fill
           style={{ objectFit: "cover" }}
           priority
         />
+        <div className="h-full absolute bg-green-800 w-full opacity-30"></div>
       </div>
 
       {/* Right: Login Form */}
       <div className="lg:p-36 md:p-52 sm:p-20 p-8 w-full lg:w-1/2">
         <Link href="/">
-          <h1 className="text-2xl font-bold text-primary flex gap-x-2 mb-4">
+          <h1 className="text-2xl font-bold text-green-700 flex gap-x-2 mb-4">
             <Timer className="self-center" />
             <span>GenPlan</span>
           </h1>
@@ -132,7 +132,7 @@ const Login = () => {
           {/* Login Button */}
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+            className="bg-green-700 hover:bg-green-400 text-white font-semibold rounded-md py-2 px-4 w-full"
           >
             Login
           </button>

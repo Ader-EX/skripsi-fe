@@ -90,11 +90,11 @@ const DosenTimetable = () => {
   return (
     <div className="w-full flex flex-col gap-y-4 mx-auto p-4">
       <div className="w-full flex justify-between">
-        <h1 className="text-primary font-bold text-2xl">Jadwal Dosen</h1>
+        <h1 className="text-green-700 font-bold text-2xl">Jadwal Dosen</h1>
       </div>
 
       <Card className="bg-surface border-border">
-        <CardHeader className="bg-primary text-primary-foreground p-4">
+        <CardHeader className="bg-green-700 text-white p-4">
           <h2 className="text-lg font-semibold">Jadwal Mengajar</h2>
           <p className="text-sm opacity-90">
             Menampilkan daftar mata kuliah yang diajar oleh dosen
@@ -111,7 +111,7 @@ const DosenTimetable = () => {
             />
             <Button
               onClick={handleSearchClick}
-              className="bg-primary text-white"
+              className="bg-green-700 text-white"
             >
               <Search />
               Cari
@@ -121,13 +121,13 @@ const DosenTimetable = () => {
           {/* Table */}
           {loading ? (
             <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <Loader2 className="h-8 w-8 animate-spin text-green-700" />
             </div>
           ) : (
             <div className="overflow-x-auto">
               <Table className="w-full border-collapse">
                 <TableHeader>
-                  <TableRow className="bg-primary/5">
+                  <TableRow className="bg-green-700/5">
                     <TableHead>Kode Mata Kuliah</TableHead>
                     <TableHead>Mata Kuliah</TableHead>
                     <TableHead>Kelas</TableHead>

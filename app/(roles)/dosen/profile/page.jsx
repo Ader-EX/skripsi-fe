@@ -323,7 +323,9 @@ const DosenProfile = () => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Simpan</Button>
+                <Button type="submit" className="bg-green-700">
+                  Simpan
+                </Button>
               </div>
             </section>
           </form>

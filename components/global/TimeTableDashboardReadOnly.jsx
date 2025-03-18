@@ -88,7 +88,7 @@ const TimeTableDashboardReadOnly = () => {
           />
           <Button
             onClick={handleSearch}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-green-700 hover:bg-green/90"
           >
             <Search className="mr-2 h-4 w-4" />
             Cari
@@ -178,7 +178,7 @@ const TimeTableDashboardReadOnly = () => {
           <Button
             disabled={pageNumber === 1}
             onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
-            className="flex items-center"
+            className="flex items-center bg-green-700"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
             Sebelumnya
@@ -191,7 +191,7 @@ const TimeTableDashboardReadOnly = () => {
             onClick={() =>
               setPageNumber((prev) => Math.min(prev + 1, totalPages))
             }
-            className="flex items-center"
+            className="flex items-center bg-green-700"
           >
             Selanjutnya
             <ChevronRight className="h-4 w-4 ml-1" />
