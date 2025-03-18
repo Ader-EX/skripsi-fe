@@ -123,7 +123,7 @@ const EditTimetable = () => {
       const method = timetableId ? "PUT" : "POST";
       const url = timetableId
         ? `${API_URL}/timetable/${timetableId}`
-        : `${API_URL}/timetable`;
+        : `${API_URL}/timetable/`;
 
       const response = await fetch(url, {
         method,
