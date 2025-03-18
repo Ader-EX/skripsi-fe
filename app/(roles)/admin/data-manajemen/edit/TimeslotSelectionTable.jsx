@@ -14,7 +14,7 @@ const TimeslotSelectionTable = ({
   availableTimeslots,
   selectedTimeslots,
   onTimeslotToggle,
-  timetableTimeslots, // Pass in previously selected timeslots from timetable/{id}
+  timetableTimeslots = [], // Pass in previously selected timeslots from timetable/{id}
 }) => {
   // Group timeslots by start_time so each row represents a unique time slot
   const groupedByTime = availableTimeslots.reduce((acc, timeslot) => {

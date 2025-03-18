@@ -1,0 +1,221 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+"use client";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import OpenedClassSelectionDialog from "@/components/global/OpenedClassSelectionDialog";
+import RuanganSelectionDialog from "@/components/global/RuanganSelectionDialog";
+import TimeslotSelectionTable from "../../admin/data-manajemen/edit/TimeslotSelectionTable";
+import toast from "react-hot-toast";
+import { Label } from "@/components/ui/label";
+import { Pencil } from "lucide-react";
+import Cookies from "js-cookie";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const AddTemporarySchedule = () => {
+  const router = useRouter();
+  const searchParams = window !== "undefined" ? useSearchParams() : null;
+  const timetableId = searchParams ? searchParams.get("id") : null;
+
+  const [selectedOpenedClass, setSelectedOpenedClass] = useState(null);
+  const [selectedRuangan, setSelectedRuangan] = useState(null);
+  const [selectedTimeslots, setSelectedTimeslots] = useState([]);
+  const [availableTimeslots, setAvailableTimeslots] = useState([]);
+  const [isOpenedClassDialogOpen, setIsOpenedClassDialogOpen] = useState(false);
+  const [isRuanganDialogOpen, setIsRuanganDialogOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [timetableTimeslots, setTimetableTimeslots] = useState([]); // Add this state to track original timeslots
+
+  const token = Cookies.get("access_token");
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (timetableId) {
+      fetchTimetableDetails(timetableId);
+    }
+  }, [timetableId]);
+
+  const fetchTimetableDetails = async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/timetable/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Failed to fetch timetable details");
+
+      const data = await response.json();
+      setSelectedOpenedClass({
+        id: data.opened_class_id,
+        nama_mk: data.mata_kuliah_nama,
+        kelas: data.kelas,
+        sks: data.sks,
+      });
+      setSelectedRuangan({
+        id: data.ruangan_id,
+        nama_ruang: data.ruangan_nama,
+      });
+
+      // Store the original timeslot IDs from the timetable
+      if (data.timeslot_ids) {
+        setTimetableTimeslots(data.timeslot_ids);
+        setSelectedTimeslots(data.timeslot_ids);
+      }
+
+      fetchRuanganDetails(data.ruangan_id);
+    } catch (error) {
+      console.error("Error fetching timetable:", error);
+    }
+  };
+
+  const fetchRuanganDetails = async (ruanganId) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/ruangan/timeslots/availability?ruangan_id=${ruanganId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) throw new Error("Failed to fetch room timeslots");
+
+      const data = await response.json();
+      setAvailableTimeslots(data);
+    } catch (error) {
+      console.error("Error fetching room timeslots:", error);
+    }
+  };
+
+  const handleOpenedClassSelect = (openedClass) => {
+    setSelectedOpenedClass({
+      id: openedClass.id,
+      nama_mk: openedClass.mata_kuliah.nama,
+      kelas: openedClass.kelas,
+      sks: openedClass.sks,
+    });
+  };
+
+  const handleRuanganSelect = (ruangan) => {
+    setSelectedRuangan({
+      id: ruangan.id,
+      nama_ruang: ruangan.nama_ruang,
+    });
+    fetchRuanganDetails(ruangan.id);
+  };
+
+  const handleTimeslotToggle = (timeslotId) => {
+    setSelectedTimeslots((prevSelected) =>
+      prevSelected.includes(timeslotId)
+        ? prevSelected.filter((id) => id !== timeslotId)
+        : [...prevSelected, timeslotId]
+    );
+  };
+
+  const handleSubmit = async () => {
+    if (
+      !selectedOpenedClass ||
+      !selectedRuangan ||
+      selectedTimeslots.length === 0
+    ) {
+      toast.error(
+        "Pilih kelas yang tersedia, ruangan, dan minimal satu waktu."
+      );
+      return;
+    }
+
+    try {
+      // Endpoint diarahkan ke temporary-timetables route yang udah kamu buat di FastAPI
+      const response = await fetch(`${API_URL}/temporary-timetables/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          timetable_id: parseInt(timetableId), // dari param
+          new_ruangan_id: selectedRuangan.id,
+          new_timeslot_ids: selectedTimeslots,
+          new_day: null, // silakan isi jika ada perubahan hari
+          change_reason: "Perubahan jadwal sementara", // bisa diinput user
+          start_date: new Date().toISOString(), // contoh: hari ini
+          end_date: new Date(
+            new Date().setDate(new Date().getDate() + 7)
+          ).toISOString(), // contoh: berlaku 7 hari
+          created_by: "dosen", // sesuaikan dengan user yang login
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.detail || "Failed to save temporary timetable"
+        );
+      }
+
+      toast.success("Temporary timetable berhasil disimpan!");
+      router.push("/admin/data-manajemen");
+    } catch (error) {
+      toast.error(error.message || "Error saving temporary timetable");
+    }
+  };
+
+  if (!isMounted) return null;
+
+  return (
+    <div className="p-8 flex flex-col w-full gap-y-6">
+      {/* (Card bagian atas tetap sama, tidak berubah) */}
+
+      <Card>
+        <CardHeader>
+          <div
+            onClick={() => router.back()}
+            className="mb-4 text-blue-500 text-sm cursor-pointer"
+          >
+            &larr; Kembali ke halaman sebelumnya
+          </div>
+          <CardTitle className="flex gap-x-2 text-blue-500 items-center ">
+            <Pencil className="w-4 " />
+            Temporary Timetable Editor
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Label>Kelas Yang Dibuka</Label>
+          <Input
+            value={selectedOpenedClass ? `${selectedOpenedClass.nama_mk}` : ""}
+            readOnly
+          />
+          <br />
+
+          <Label className="mt-4">Ruangan Baru (Temporary)</Label>
+          <Input
+            value={selectedRuangan ? `${selectedRuangan.nama_ruang}` : ""}
+            readOnly
+            onClick={() => setIsRuanganDialogOpen(true)}
+            className="cursor-pointer"
+          />
+        </CardContent>
+      </Card>
+
+      {availableTimeslots.length > 0 && (
+        <TimeslotSelectionTable
+          availableTimeslots={availableTimeslots}
+          selectedTimeslots={selectedTimeslots}
+          onTimeslotToggle={handleTimeslotToggle}
+          timetableTimeslots={timetableTimeslots || []} // Pass the timetableTimeslots with a default empty array
+        />
+      )}
+
+      <Button onClick={handleSubmit} className="mt-6 bg-primary">
+        Save Temporary Timetable
+      </Button>
+
+      <RuanganSelectionDialog
+        isOpen={isRuanganDialogOpen}
+        onClose={() => setIsRuanganDialogOpen(false)}
+        onSelect={handleRuanganSelect}
+      />
+    </div>
+  );
+};
+
+export default AddTemporarySchedule;
