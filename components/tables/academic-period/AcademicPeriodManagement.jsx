@@ -99,7 +99,7 @@ const AcademicPeriodManagement = () => {
   const handleConfirmDelete = async () => {
     if (!deleteId) return;
     try {
-      await fetch(`${API_URL}/${deleteId}`, {
+      await fetch(`${API_URL}${deleteId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

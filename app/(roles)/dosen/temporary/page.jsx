@@ -27,8 +27,8 @@ const AddTemporarySchedule = () => {
   const [isOpenedClassDialogOpen, setIsOpenedClassDialogOpen] = useState(false);
   const [isRuanganDialogOpen, setIsRuanganDialogOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [timetableTimeslots, setTimetableTimeslots] = useState([]); // Add this state to track original timeslots
-  const [alasan, setAlasan] = useState(""); // Add state for alasan
+  const [timetableTimeslots, setTimetableTimeslots] = useState([]);
+  const [alasan, setAlasan] = useState("");
 
   const token = Cookies.get("access_token");
 

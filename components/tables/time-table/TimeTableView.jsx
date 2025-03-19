@@ -39,7 +39,7 @@ import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 const API_CHECK_CONFLICTS = `${process.env.NEXT_PUBLIC_API_URL}/algorithm/check-conflicts`;
 const API_RESOLVER_CONFLICTS = `${process.env.NEXT_PUBLIC_API_URL}/timetable/resolve-conflicts`;
 
-const TimeTableView = ({ scheduleList, loading }) => {
+const TimeTableView = ({ scheduleList, loading, fetchSchedules }) => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [conflicts, setConflicts] = useState([]);
@@ -74,7 +74,6 @@ const TimeTableView = ({ scheduleList, loading }) => {
 
   const fetchConflicts = async () => {
     try {
-      // Activate the overlay with a custom message before fetching
       setOverlayText("Mengecek konflik jadwal...");
       setIsActive(true);
       const response = await fetch(API_CHECK_CONFLICTS, {
@@ -84,16 +83,16 @@ const TimeTableView = ({ scheduleList, loading }) => {
       const data = await response.json();
       if (data.total_conflicts > 0) {
         toast.error("Bentrok Ditemukan di jadwal");
-        setTimeout(() => location.reload(), 2000);
       } else {
         toast.success("Tidak ada bentrok dalam jadwal.");
-        setTimeout(() => location.reload(), 2000);
       }
     } catch (error) {
       console.error("Error checking conflicts:", error);
       toast.error("Gagal mengecek konflik");
     } finally {
       setIsActive(false);
+
+      fetchSchedules();
     }
   };
 

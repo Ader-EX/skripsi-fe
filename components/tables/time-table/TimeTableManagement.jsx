@@ -143,6 +143,7 @@ const TimeTableManagement = () => {
           scheduleList={scheduleList}
           onEdit={handleEdit}
           loading={loading}
+          fetchSchedules={fetchSchedules}
         />
 
         {/* Pagination */}
