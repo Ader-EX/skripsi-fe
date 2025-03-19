@@ -63,11 +63,6 @@ const TimeTableView = ({
       .sort((a, b) => a.start_time.localeCompare(b.start_time));
   }, [timeSlots, selectedDay]);
 
-  useEffect(() => {
-    console.log("Selected Day:", selectedDay);
-    console.log("Unique Time Slots:", uniqueTimeSlots);
-  }, [selectedDay, uniqueTimeSlots]);
-
   // Group rooms by building.
   const roomsByBuilding = useMemo(() => {
     const grouped = rooms.reduce((acc, room) => {
@@ -122,37 +117,45 @@ const TimeTableView = ({
       : [];
   };
 
-  // Render a schedule cell.
   const renderScheduleCard = (scheduleList, timeSlot, roomId) => {
-    console.log(scheduleList);
     if (!scheduleList.length) return null;
-    if (scheduleList.length > 1) {
-      return (
-        <div
-          className="h-full w-full p-2 flex flex-row gap-2 bg-red-100"
-          style={{ whiteSpace: "nowrap", overflow: "hidden" }}
-        >
-          {scheduleList.map((schedule) => renderSingleSchedule(schedule))}
-        </div>
-      );
-    }
+
     const schedule = scheduleList[0];
+
     let containerClass = "bg-green-100";
-    if (schedule.is_conflicted) {
+
+    if (schedule.type === 1) {
+      containerClass = "bg-purple-200";
+    } else if (schedule.is_conflicted) {
       containerClass = schedule.reason ? "bg-red-100" : "bg-yellow-100";
     }
+
     return (
       <div
         className={`h-full w-full p-2 flex flex-row gap-2 ${containerClass}`}
         style={{ whiteSpace: "nowrap", overflow: "hidden" }}
       >
-        {renderSingleSchedule(schedule)}
+        {scheduleList.map(renderSingleSchedule)}
       </div>
     );
   };
 
-  // Render a single schedule with tooltip.
   const renderSingleSchedule = (schedule) => {
+    const subject = schedule.subject || {};
+    const subjectName = subject.name || "-";
+    const subjectCode = subject.code || "-";
+    const kelas = subject.kelas || "-";
+
+    const room = schedule.room_id || "-";
+
+    // Buat schedule string dari time_slots
+    const timeslots = schedule.time_slots || [];
+    const day = timeslots.length > 0 ? timeslots[0].day : "-";
+    const startTime = timeslots.length > 0 ? timeslots[0].start_time : "-";
+    const endTime =
+      timeslots.length > 0 ? timeslots[timeslots.length - 1].end_time : "-";
+    const scheduleTime = `${day} ${startTime} - ${endTime}`;
+
     return (
       <TooltipProvider key={schedule.id}>
         <Tooltip>
@@ -160,32 +163,31 @@ const TimeTableView = ({
             <div
               className="flex-1 p-2 rounded cursor-pointer overflow-hidden"
               style={{ minWidth: 0 }}
-              onClick={() => {
-                if (schedule.is_conflicted && schedule.reason) {
-                  setSelectedConflict(schedule);
-                }
-              }}
+              onClick={() =>
+                schedule.is_conflicted &&
+                schedule.reason &&
+                setSelectedConflict(schedule)
+              }
             >
-              <div className="font-semibold truncate">
-                {schedule.subject.name}
-              </div>
+              <div className="font-semibold truncate">{subjectName}</div>
               <div className="text-xs truncate">
-                {schedule.subject.code} - {schedule.subject.kelas}
+                {subjectCode} - {kelas}
               </div>
-              <div className="text-xs truncate">
-                {schedule.lecturers?.map((l) => l.name).join(", ")}
-              </div>
+              <div className="text-xs truncate">{scheduleTime}</div>
             </div>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{schedule.subject.name}</p>
+            {schedule.type === 1 && (
+              <p className="text-white font-bold text-md">
+                Kelas Pengganti: {schedule.start_date} - {schedule.end_date}
+              </p>
+            )}
+            <p>{subjectName}</p>
             <p>
-              {schedule.subject.code} - {schedule.subject.kelas}
+              {subjectCode} - {kelas}
             </p>
-            <p>Room: {schedule.room_id}</p>
-            <p>
-              Lecturers: {schedule.lecturers?.map((l) => l.name).join(", ")}
-            </p>
+            <p>Room: {room}</p>
+            <p>Schedule: {scheduleTime}</p>
             {schedule.is_conflicted && schedule.reason && (
               <p className="text-red-500">{schedule.reason}</p>
             )}
@@ -290,11 +292,9 @@ const TimeTableView = ({
                 }, minmax(200px, 1fr))`,
               }}
             >
-              {/* Time Column Header */}
               <div className="sticky top-0 left-0 z-30 bg-gray-100 p-2 font-bold border-b border-r">
                 Time
               </div>
-              {/* Room Headers */}
               {Object.entries(roomsByBuilding).flatMap(([, buildingRooms]) =>
                 buildingRooms.map((room, index) => (
                   <div
@@ -305,14 +305,12 @@ const TimeTableView = ({
                   </div>
                 ))
               )}
-              {/* Rows: For each unique time slot */}
+
               {uniqueTimeSlots.map((timeSlot) => (
                 <React.Fragment key={timeSlot.id}>
-                  {/* Time Slot Label */}
                   <div className="sticky left-0 z-10 bg-white p-2 font-bold border">
                     {timeSlot.start_time} - {timeSlot.end_time}
                   </div>
-                  {/* Each room cell for this time slot */}
                   {Object.entries(roomsByBuilding).flatMap(
                     ([, buildingRooms]) =>
                       buildingRooms.map((room, index) => (
@@ -335,19 +333,22 @@ const TimeTableView = ({
         </div>
       </div>
 
-      {/* Legend */}
       <div className="flex items-center gap-4 p-4">
         <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-purple-300 rounded"></div>
+          <span className="text-sm">Kelas Pengganti</span>
+        </div>
+        <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-300 rounded"></div>
-          <span className="text-sm">No Conflicts</span>
+          <span className="text-sm">Tidak Ada Kendala</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-yellow-500 rounded"></div>
-          <span className="text-sm">Warning (Potential issues)</span>
+          <span className="text-sm">Warning</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-red-300 rounded"></div>
-          <span className="text-sm">Conflicts</span>
+          <span className="text-sm">Kelas Bentrok</span>
         </div>
       </div>
       {renderConflictModal()}

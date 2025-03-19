@@ -28,6 +28,7 @@ const AddTemporarySchedule = () => {
   const [isRuanganDialogOpen, setIsRuanganDialogOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [timetableTimeslots, setTimetableTimeslots] = useState([]); // Add this state to track original timeslots
+  const [alasan, setAlasan] = useState(""); // Add state for alasan
 
   const token = Cookies.get("access_token");
 
@@ -124,24 +125,23 @@ const AddTemporarySchedule = () => {
     }
 
     try {
-      // Endpoint diarahkan ke temporary-timetables route yang udah kamu buat di FastAPI
-      const response = await fetch(`${API_URL}/temporary-timetables/`, {
+      const response = await fetch(`${API_URL}/temporary-timetable/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          timetable_id: parseInt(timetableId), // dari param
+          timetable_id: parseInt(timetableId),
           new_ruangan_id: selectedRuangan.id,
           new_timeslot_ids: selectedTimeslots,
-          new_day: null, // silakan isi jika ada perubahan hari
-          change_reason: "Perubahan jadwal sementara", // bisa diinput user
-          start_date: new Date().toISOString(), // contoh: hari ini
+          new_day: null,
+          change_reason: alasan, // Include alasan in the request body
+          start_date: new Date().toISOString(),
           end_date: new Date(
             new Date().setDate(new Date().getDate() + 7)
-          ).toISOString(), // contoh: berlaku 7 hari
-          created_by: "dosen", // sesuaikan dengan user yang login
+          ).toISOString(),
+          created_by: "dosen",
         }),
       });
 
@@ -152,8 +152,8 @@ const AddTemporarySchedule = () => {
         );
       }
 
-      toast.success("Temporary timetable berhasil disimpan!");
-      router.push("/admin/data-manajemen");
+      toast.success("Kelas pengganti berhasil disimpan!");
+      router.back();
     } catch (error) {
       toast.error(error.message || "Error saving temporary timetable");
     }
@@ -193,6 +193,9 @@ const AddTemporarySchedule = () => {
             onClick={() => setIsRuanganDialogOpen(true)}
             className="cursor-pointer"
           />
+
+          <Label className="mt-4">Alasan</Label>
+          <Input value={alasan} onChange={(e) => setAlasan(e.target.value)} />
         </CardContent>
       </Card>
 
@@ -201,7 +204,7 @@ const AddTemporarySchedule = () => {
           availableTimeslots={availableTimeslots}
           selectedTimeslots={selectedTimeslots}
           onTimeslotToggle={handleTimeslotToggle}
-          timetableTimeslots={timetableTimeslots || []} // Pass the timetableTimeslots with a default empty array
+          timetableTimeslots={timetableTimeslots || []}
         />
       )}
 
