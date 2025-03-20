@@ -24,9 +24,10 @@ const AddTemporarySchedule = () => {
   const [selectedRuangan, setSelectedRuangan] = useState(null);
   const [selectedTimeslots, setSelectedTimeslots] = useState([]);
   const [availableTimeslots, setAvailableTimeslots] = useState([]);
-  const [isOpenedClassDialogOpen, setIsOpenedClassDialogOpen] = useState(false);
   const [isRuanganDialogOpen, setIsRuanganDialogOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [academicPeriodId, setAcademicPeriodId] = useState(null);
+
   const [timetableTimeslots, setTimetableTimeslots] = useState([]);
   const [alasan, setAlasan] = useState("");
 
@@ -34,6 +35,7 @@ const AddTemporarySchedule = () => {
 
   useEffect(() => {
     setIsMounted(true);
+    fetchActiveAcademicPeriod();
     if (timetableId) {
       fetchTimetableDetails(timetableId);
     }
@@ -58,7 +60,6 @@ const AddTemporarySchedule = () => {
         nama_ruang: data.ruangan_nama,
       });
 
-      // Store the original timeslot IDs from the timetable
       if (data.timeslot_ids) {
         setTimetableTimeslots(data.timeslot_ids);
         setSelectedTimeslots(data.timeslot_ids);
@@ -104,6 +105,21 @@ const AddTemporarySchedule = () => {
     fetchRuanganDetails(ruangan.id);
   };
 
+  const fetchActiveAcademicPeriod = async () => {
+    try {
+      const response = await fetch(`${API_URL}/academic-period/active`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Failed to fetch academic period");
+
+      const data = await response.json();
+      setAcademicPeriodId(data.id);
+    } catch (error) {
+      console.error("Error fetching academic period:", error);
+      toast.error("Gagal mendapatkan semester aktif");
+    }
+  };
+
   const handleTimeslotToggle = (timeslotId) => {
     setSelectedTimeslots((prevSelected) =>
       prevSelected.includes(timeslotId)
@@ -111,7 +127,6 @@ const AddTemporarySchedule = () => {
         : [...prevSelected, timeslotId]
     );
   };
-
   const handleSubmit = async () => {
     if (
       !selectedOpenedClass ||
@@ -136,8 +151,9 @@ const AddTemporarySchedule = () => {
           new_ruangan_id: selectedRuangan.id,
           new_timeslot_ids: selectedTimeslots,
           new_day: null,
-          change_reason: alasan, // Include alasan in the request body
+          change_reason: alasan,
           start_date: new Date().toISOString(),
+          academic_period_id: academicPeriodId,
           end_date: new Date(
             new Date().setDate(new Date().getDate() + 7)
           ).toISOString(),

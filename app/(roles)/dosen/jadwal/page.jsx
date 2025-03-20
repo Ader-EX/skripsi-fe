@@ -77,7 +77,6 @@ const MahasiswaJadwal = () => {
     setSearchQuery(e.target.value);
   };
 
-  // FIXED: Use the current selectedDay instead of a hardcoded "1"
   const handleSearchSubmit = () => {
     fetchTimetableData(searchQuery, selectedDay);
   };

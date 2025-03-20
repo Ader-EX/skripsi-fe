@@ -30,7 +30,7 @@ const DosenTemporaryTimetable = () => {
   const [searchInput, setSearchInput] = useState("");
   const [filter, setFilter] = useState("");
 
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -165,12 +165,11 @@ const DosenTemporaryTimetable = () => {
                   ) : (
                     temporaryData.map((temp) => (
                       <TableRow key={temp.temporary_timetable_id}>
-                        {/* Fix: Remove whitespace */}
                         <TableCell>{temp.kodemk}</TableCell>
                         <TableCell>{temp.matakuliah}</TableCell>
                         <TableCell>{temp.dosen}</TableCell>
                         <TableCell>{temp.ruangan}</TableCell>
-                        <TableCell>{temp.schedule}</TableCell>
+                        <TableCell>{temp.schedule.split(".").pop()}</TableCell>
                         <TableCell>
                           {new Date(temp.start_date).toLocaleDateString()}
                         </TableCell>
