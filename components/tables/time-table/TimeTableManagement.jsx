@@ -8,9 +8,17 @@ import {
   ChevronRight,
   Search,
   AlertTriangle,
+  Filter,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import TimeTableView from "./TimeTableView";
 import toast from "react-hot-toast";
 import TimeTableForm from "./TimeTableForm"; // Import the form component
@@ -34,7 +42,8 @@ const TimeTableManagement = () => {
   const [searchParams, setSearchParams] = useState({
     limit: 10,
     filterText: "",
-    isConflicted: null,
+    is_conflicted: null,
+    source: "2", // Default to "Keduanya" (both)
   });
   const [searchInput, setSearchInput] = useState("");
   const token = Cookies.get("access_token");
@@ -52,9 +61,11 @@ const TimeTableManagement = () => {
       const params = new URLSearchParams();
       params.append("page", pageNumber);
       params.append("limit", searchParams.limit);
+      params.append("source", searchParams.source);
+
       if (searchParams.filterText)
         params.append("filterText", searchParams.filterText);
-      if (showConflicts) params.append("isConflicted", "true");
+      if (showConflicts) params.append("is_conflicted", "true");
 
       const response = await fetch(`${API_URL}?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -67,6 +78,9 @@ const TimeTableManagement = () => {
       setTotalPages(data.total_pages || 1);
     } catch (error) {
       console.error("Error fetching schedules:", error);
+      toast.error("Gagal memuat jadwal", {
+        description: "Terjadi kesalahan saat mengambil data jadwal.",
+      });
     } finally {
       setLoading(false);
       setIsActive(false);
@@ -79,6 +93,11 @@ const TimeTableManagement = () => {
 
   const handleSearch = () => {
     setSearchParams((prev) => ({ ...prev, filterText: searchInput }));
+    setPageNumber(1);
+  };
+
+  const handleSourceChange = (value) => {
+    setSearchParams((prev) => ({ ...prev, source: value }));
     setPageNumber(1);
   };
 
@@ -117,7 +136,7 @@ const TimeTableManagement = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col gap-4 mb-4">
+        <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="flex-1">
             <Label>Pencarian</Label>
             <div className="flex gap-2">
@@ -136,6 +155,41 @@ const TimeTableManagement = () => {
                 Cari
               </Button>
             </div>
+          </div>
+
+          <div className="w-full md:w-64">
+            <Label>Tipe Jadwal</Label>
+            <Select
+              value={searchParams.source}
+              onValueChange={handleSourceChange}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih tipe jadwal" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">Permanen</SelectItem>
+                <SelectItem value="1">Pengganti</SelectItem>
+                <SelectItem value="2">Keduanya</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="w-full md:w-64">
+            <Label>Status Konflik</Label>
+            <Button
+              variant={showConflicts ? "destructive" : "outline"}
+              className="w-full mt-1 flex justify-between items-center"
+              onClick={() => setShowConflicts(!showConflicts)}
+            >
+              <span>{!showConflicts ? "Semua Jadwal" : "Konflik"}</span>
+              {showConflicts && (
+                <AlertTriangle
+                  className={`h-4 w-4 ${
+                    showConflicts ? "text-red-500" : "text-white"
+                  }`}
+                />
+              )}
+            </Button>
           </div>
         </div>
 
