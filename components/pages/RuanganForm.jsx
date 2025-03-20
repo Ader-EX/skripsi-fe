@@ -233,7 +233,7 @@ const RuanganForm = ({ isOpen, onClose, isEdit, ruangan, fetchRuangan }) => {
                   <SelectItem value="DS3">DS3</SelectItem>
                   <SelectItem value="DS4">DS4</SelectItem>
 
-                  <SelectItem value="OTH">Other</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
               {errors.gedung && (

@@ -42,6 +42,7 @@ const MataKuliahForm = ({
     tipe_mk: "",
     have_kelas_besar: false,
     program_studi_id: "",
+    program_studi_name: "",
   });
 
   useEffect(() => {
@@ -56,6 +57,7 @@ const MataKuliahForm = ({
         tipe_mk: matakuliah.tipe_mk,
         have_kelas_besar: matakuliah.have_kelas_besar,
         program_studi_id: matakuliah.program_studi_id,
+        program_studi_name: matakuliah.program_studi_name,
       });
     } else {
       setFormData({
@@ -68,6 +70,7 @@ const MataKuliahForm = ({
         tipe_mk: "",
         have_kelas_besar: false,
         program_studi_id: "",
+        program_studi_name: "",
       });
     }
   }, [isEdit, matakuliah]);
@@ -223,7 +226,12 @@ const MataKuliahForm = ({
               name="program_studi_id"
               value={formData.program_studi_id}
               onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, program_studi_id: value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  program_studi_id: value,
+                  program_studi_name: programStudi.find((ps) => ps.id === value)
+                    .name,
+                }))
               }
             >
               <SelectTrigger>

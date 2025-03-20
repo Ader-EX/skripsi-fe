@@ -127,7 +127,7 @@ const MahasiswaManagement = () => {
   const handleConfirmDelete = async () => {
     if (!deleteId) return;
     try {
-      const response = await fetch(`${API_URL}/${deleteId}`, {
+      const response = await fetch(`${API_URL}${deleteId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

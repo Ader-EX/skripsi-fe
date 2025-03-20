@@ -22,7 +22,6 @@ import Cookies from "js-cookie";
 
 const PROGRAM_STUDI_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi/`;
 
-// Helper: Convert API date ("dd/mm/yyyy") to input date ("yyyy-mm-dd")
 const convertToInputDateFormat = (dateStr) => {
   if (!dateStr) return "";
   const parts = dateStr.split("/");
@@ -30,13 +29,7 @@ const convertToInputDateFormat = (dateStr) => {
   const [day, month, year] = parts;
   return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 };
-
 const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
-  const convertDateFormat = (dateStr) => {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${day}/${month}/${year}`;
-  };
   const [programStudiList, setProgramStudiList] = useState([]);
   const [formData, setFormData] = useState(
     initialData || {
@@ -48,7 +41,7 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
       nidn: "",
       nomor_ktp: "",
       tanggal_lahir: "",
-      progdi_id: "",
+      progdi_id: 1,
       ijin_mengajar: true,
       status_dosen: "",
       jabatan: "",
@@ -57,7 +50,6 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
     }
   );
   const token = Cookies.get("access_token");
-
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -68,16 +60,16 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
         nidn: initialData.nidn || "",
         nomor_ktp: initialData.nomor_ktp || "",
         nama: initialData.nama || "",
+        // Convert initial date to ISO format for the date input
         tanggal_lahir: initialData.tanggal_lahir
           ? convertToInputDateFormat(initialData.tanggal_lahir)
           : "",
-        progdi_id: initialData.progdi_id || "",
+        progdi_id: initialData.progdi_id || 1,
         ijin_mengajar:
           initialData.ijin_mengajar !== undefined
             ? initialData.ijin_mengajar
             : true,
-        // Note: We use initialData.status_dosen (or empty string) for statusDosen
-        status_dosen: initialData.status_dosen || "",
+        status_dosen: initialData.status_dosen || "tetap",
         jabatan: initialData.jabatan || "",
         title_depan: initialData.title_depan || "",
         title_belakang: initialData.title_belakang || "",
@@ -92,13 +84,12 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
         nomor_ktp: "",
         nama: "",
         tanggal_lahir: "",
-        progdi_id: "",
+        progdi_id: 1,
         ijin_mengajar: true,
-        statusDosen: "",
+        status_dosen: "",
         jabatan: "",
         title_depan: "",
         title_belakang: "",
-
         is_sekdos: false,
       });
     }
@@ -134,7 +125,7 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
   const handleSelectChange = (value, field) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: field === "progdi_id" ? parseInt(value, 10) : value,
     }));
   };
 
@@ -143,9 +134,9 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
 
     const formattedData = {
       ...formData,
-      tanggal_lahir: formData.tanggal_lahir
-        ? convertDateFormat(formData.tanggal_lahir)
-        : "",
+      // tanggal_lahir: formData.tanggal_lahir
+      //   ? convertDateFormat(formData.tanggal_lahir)
+      //   : "",
     };
 
     onSubmit(formattedData);
@@ -303,6 +294,7 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
           <div>
             <Label htmlFor="status_dosen">Status Dosen</Label>
             <Select
+              required
               value={formData.status_dosen || ""}
               onValueChange={(value) =>
                 handleSelectChange(value, "status_dosen")
