@@ -179,7 +179,42 @@ const AdminJadwal = () => {
     }
   };
 
-  // (Other generate/check functions remain unchanged)
+  const checkConflicts = async () => {
+    setIsCheckingConflicts(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/algorithm/check-conflicts`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.total_conflicts > 0) {
+        setConflicts(data.conflict_details);
+        setShowConflictDialog(true);
+        toast.error(`Found ${data.total_conflicts} schedule conflicts`, {
+          description: "Please review the conflicts and resolve them",
+        });
+      } else {
+        toast.success("No conflicts found", {
+          description: "Your schedule is conflict-free",
+        });
+      }
+    } catch (err) {
+      toast.error("Failed to check conflicts", {
+        description: err.message,
+      });
+    } finally {
+      setIsCheckingConflicts(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -258,9 +293,7 @@ const AdminJadwal = () => {
               <Button
                 variant="outline"
                 className="flex items-center gap-2 bg-yellow-400"
-                onClick={() => {
-                  router.push("/admin/data-manajemen");
-                }}
+                onClick={checkConflicts}
               >
                 <AlertTriangle />
                 {isCheckingConflicts ? "Checking..." : "Check Conflicts"}
