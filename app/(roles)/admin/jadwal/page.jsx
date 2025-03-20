@@ -368,7 +368,7 @@ const AdminJadwal = () => {
                 onClick={() => router.push("/admin/data-manajemen")}
                 className="bg-red-500 hover:bg-red-600"
               >
-                Resolve Conflicts
+                Sunting Konflik
               </Button>
             </DialogFooter>
           </DialogContent>
