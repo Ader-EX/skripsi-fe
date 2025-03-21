@@ -119,7 +119,7 @@ const AdminJadwal = () => {
     setShowResetConfirmDialog(false);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/algorithm/reset-schedule/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/algorithm/reset-schedule`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
