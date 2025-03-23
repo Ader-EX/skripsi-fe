@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +23,7 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { decodeToken } from "@/utils/decoder";
+import MahasiswaTemporaryTimetable from "@/components/global/MahasiswaTemporaryTimetable";
 
 const MahasiswaDashboard = () => {
   const [availableCourses, setAvailableCourses] = useState([]);
@@ -374,17 +376,16 @@ const MahasiswaDashboard = () => {
   return (
     <div className="w-full flex flex-col gap-y-4 mx-auto p-4">
       <div className="w-full flex justify-between">
-        <h1 className="text-primary font-bold text-2xl">Dashboard</h1>
+        <h1 className="text-green-700 font-bold text-2xl">Dashboard</h1>
         <Button
           onClick={openCourseSelectionModal}
-          className=" bg-primary text-primary-foreground hover:bg-primary/90"
+          className=" bg-green-700 text-primary-foreground hover:bg-green-700/90"
         >
           <Plus /> Pilih Mata Kuliah
         </Button>
       </div>
-
       <Card className="bg-surface border-border">
-        <CardHeader className="bg-primary text-primary-foreground">
+        <CardHeader className="bg-green-700 text-primary-foreground">
           <h2 className="text-lg font-semibold">
             Periode Pengisian KRS {currentAcademicYear}{" "}
             {currentSemester === 1 ? "Ganjil" : "Genap"}
@@ -520,8 +521,7 @@ const MahasiswaDashboard = () => {
           </ol>
         </CardContent>
       </Card>
-
-      {/* Course Selection Modal */}
+      <MahasiswaTemporaryTimetable />
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
