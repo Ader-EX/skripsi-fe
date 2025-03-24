@@ -83,10 +83,17 @@ const MahasiswaTemporaryTimetable = () => {
     setFilter(searchInput);
     setPage(1);
   };
-
   const formatTimeslots = (timeslots) => {
-    const parts = timeslots.split(".");
-    return parts[1];
+    if (!timeslots || timeslots === "-") return "-";
+
+    const parts = timeslots.split("\t");
+
+    if (parts.length < 2) return timeslots;
+    const dayPart = parts[0].includes("DayEnum.")
+      ? parts[0].split("DayEnum.")[1]
+      : parts[0];
+
+    return `${dayPart} ${parts[1]}`;
   };
 
   return (
