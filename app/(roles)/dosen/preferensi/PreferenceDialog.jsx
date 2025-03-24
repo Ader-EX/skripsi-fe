@@ -29,6 +29,7 @@ const PreferenceDialog = ({
     "Kewajiban keluarga",
     "Jadwal administrasi",
     "Kendala jadwal lainnya",
+    "Alasan lainnya",
   ];
 
   return (
