@@ -11,6 +11,15 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import { format } from "date-fns/format";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/academic-period/`;
 
@@ -48,6 +57,13 @@ const AcademicPeriodForm = ({ isOpen, onClose, onSubmit, initialData }) => {
     }));
   };
 
+  const handleDateChange = (date, field) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: date ? format(date, "yyyy-MM-dd") : "",
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -74,7 +90,7 @@ const AcademicPeriodForm = ({ isOpen, onClose, onSubmit, initialData }) => {
         onClose(); // Close form
       } else {
         const errorData = await response.json();
-        toast.error(`Gagal menyimpan data: ${errorData.detail}`);
+        toast.error(`Gagal menyimpan data, pastikan data sudah terisi semua`);
       }
     } catch (error) {
       toast.error("Error saving academic period:", error);
@@ -90,40 +106,96 @@ const AcademicPeriodForm = ({ isOpen, onClose, onSubmit, initialData }) => {
           </DialogTitle>
         </DialogHeader>
         <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
-          <Label>Tahun Ajaran</Label>
-          <Input
-            name="tahun_ajaran"
-            value={formData.tahun_ajaran}
-            onChange={handleChange}
-            required
-          />
+          <div className="grid gap-2">
+            <Label htmlFor="tahun_ajaran">Tahun Ajaran</Label>
+            <Input
+              id="tahun_ajaran"
+              name="tahun_ajaran"
+              value={formData.tahun_ajaran}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <Label>Semester</Label>
-          <Input
-            type="number"
-            name="semester"
-            value={formData.semester}
-            onChange={handleChange}
-            required
-          />
+          <div className="grid gap-2">
+            <Label htmlFor="semester">Semester</Label>
+            <Input
+              id="semester"
+              type="number"
+              name="semester"
+              value={formData.semester}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <Label>Tanggal Mulai</Label>
-          <Input
-            type="date"
-            name="start_date"
-            value={formData.start_date}
-            onChange={handleChange}
-            required
-          />
+          <div className="grid gap-2">
+            <Label>Tanggal Mulai</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !formData.start_date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {formData.start_date ? (
+                    format(new Date(formData.start_date), "PPP")
+                  ) : (
+                    <span>Pilih tanggal</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  className={"bg-white"}
+                  selected={
+                    formData.start_date
+                      ? new Date(formData.start_date)
+                      : undefined
+                  }
+                  onSelect={(date) => handleDateChange(date, "start_date")}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-          <Label>Tanggal Berakhir</Label>
-          <Input
-            type="date"
-            name="end_date"
-            value={formData.end_date}
-            onChange={handleChange}
-            required
-          />
+          <div className="grid gap-2">
+            <Label>Tanggal Berakhir</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !formData.end_date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {formData.end_date ? (
+                    format(new Date(formData.end_date), "PPP")
+                  ) : (
+                    <span>Pilih tanggal</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  className={"bg-white"}
+                  mode="single"
+                  selected={
+                    formData.end_date ? new Date(formData.end_date) : undefined
+                  }
+                  onSelect={(date) => handleDateChange(date, "end_date")}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
           <div className="flex items-center gap-2">
             <Checkbox
