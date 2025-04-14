@@ -11,7 +11,6 @@ export default function Home() {
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-red-50">
         <main className="max-w-screen-xl mx-auto px-10 pt-8 pb-8 flex flex-col gap-y-6">
-          {/* University Logo and Badge */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-3">
               <Image

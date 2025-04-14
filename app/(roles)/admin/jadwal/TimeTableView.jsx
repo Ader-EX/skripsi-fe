@@ -48,7 +48,6 @@ const TimeTableView = ({
     }
   }, [filters, onDayChange, selectedDay]);
 
-  // Filter unique time slots for the selected day.
   const uniqueTimeSlots = useMemo(() => {
     return timeSlots
       .filter((slot) => slot.day === selectedDay)
@@ -63,7 +62,6 @@ const TimeTableView = ({
       .sort((a, b) => a.start_time.localeCompare(b.start_time));
   }, [timeSlots, selectedDay]);
 
-  // Group rooms by building.
   const roomsByBuilding = useMemo(() => {
     const grouped = rooms.reduce((acc, room) => {
       if (!acc[room.building]) {
@@ -78,13 +76,10 @@ const TimeTableView = ({
     return grouped;
   }, [rooms, selectedBuilding]);
 
-  // Get a unique list of buildings.
   const buildings = useMemo(() => {
     return [...new Set(rooms.map((room) => room.building))];
   }, [rooms]);
 
-  // Memoize a lookup map for schedules:
-  // scheduleMap[roomId][timeslotId] = array of schedules for that cell.
   const scheduleMap = useMemo(() => {
     const map = {};
     schedules.forEach((schedule) => {
@@ -103,7 +98,6 @@ const TimeTableView = ({
     return map;
   }, [schedules]);
 
-  // Quickly retrieve schedules for a given time slot and room.
   const getScheduleForSlot = (timeSlot, roomId) => {
     const tsId = Number(timeSlot.id);
     return scheduleMap[roomId] && scheduleMap[roomId][tsId]
@@ -197,7 +191,6 @@ const TimeTableView = ({
     );
   };
 
-  // Render the conflict modal.
   const renderConflictModal = () => {
     if (!selectedConflict) return null;
     return (
