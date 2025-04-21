@@ -58,7 +58,6 @@ const AdminManagement = () => {
           </TabsList>
         </div>
 
-        {/* Existing Tabs */}
         <TabsContent
           value="matakuliah"
           className="border-none p-0 mt-4 md:mt-6"

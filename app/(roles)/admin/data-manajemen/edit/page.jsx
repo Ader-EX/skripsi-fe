@@ -19,7 +19,6 @@ const EditTimetable = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // ✅ Get 'id' param from URL
   const timetableId = searchParams.get("id");
 
   const [selectedOpenedClass, setSelectedOpenedClass] = useState(null);

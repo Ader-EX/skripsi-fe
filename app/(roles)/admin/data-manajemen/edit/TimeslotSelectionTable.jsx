@@ -22,7 +22,6 @@ const TimeslotSelectionTable = ({
     return acc;
   }, {});
 
-  // Extract unique days for columns (X-axis)
   const uniqueDays = [...new Set(availableTimeslots.map((slot) => slot.day))];
 
   return (

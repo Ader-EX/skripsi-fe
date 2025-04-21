@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Search,
   AlertTriangle,
-  Filter,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,18 +42,16 @@ const TimeTableManagement = () => {
     limit: 10,
     filterText: "",
     is_conflicted: null,
-    source: "2", // Default to "Keduanya" (both)
+    source: "2",
   });
   const [searchInput, setSearchInput] = useState("");
   const token = Cookies.get("access_token");
 
-  // Get overlay controls from context
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
   const fetchSchedules = async () => {
     setLoading(true);
     try {
-      // Activate the loading overlay with a custom message
       setOverlayText("Memuat jadwal kuliah...");
       setIsActive(true);
 

@@ -30,7 +30,7 @@ const EditOpenedClass = () => {
 
   const [selectedMataKuliah, setSelectedMataKuliah] = useState(null);
   const [selectedDosen, setSelectedDosen] = useState([]);
-  const [kelas, setKelas] = useState(""); // will hold one of A-L
+  const [kelas, setKelas] = useState("");
   const [kapasitas, setKapasitas] = useState("");
   const [isMataKuliahDialogOpen, setIsMataKuliahDialogOpen] = useState(false);
   const [isDosenDialogOpen, setIsDosenDialogOpen] = useState(false);

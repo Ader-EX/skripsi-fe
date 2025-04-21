@@ -13,6 +13,14 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
@@ -24,55 +32,78 @@ const DosenTimetable = () => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
 
-  // Pagination
+  // Pagination & Filters
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [searchInput, setSearchInput] = useState("");
-  const [filter, setFilter] = useState("");
+  const [textFilter, setTextFilter] = useState("");
+  const [prodiList, setProdiList] = useState([]);
+  // default to 'all' to include every program studi
+  const [prodiFilter, setProdiFilter] = useState("all");
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+  // Fetch program studi options on mount
   useEffect(() => {
-    // Fetch user data and timetable when component mounts
+    const fetchProdiList = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/program-studi/`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("access_token")}`,
+          },
+        });
+        if (!response.ok)
+          throw new Error("Gagal mengambil daftar program studi");
+        const data = await response.json();
+        setProdiList(data);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+    fetchProdiList();
+  }, []);
+
+  // Fetch userId and timetable whenever filters change
+  useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = Cookies.get("access_token");
-
         const decodedToken = decodeToken(token);
         setUserId(decodedToken.role_id);
         await fetchDosenTimetable(decodedToken.role_id);
       } catch (error) {
         toast.error("Gagal mengambil data dosen");
-      } finally {
-        setLoading(false);
       }
     };
-
     fetchUserData();
-  }, [page, filter]); // Refetch when `page` or `filter` changes
+  }, [page, textFilter, prodiFilter]);
 
   const fetchDosenTimetable = async (dosenId) => {
     try {
       setLoading(true);
       const token = Cookies.get("access_token");
+      const params = new URLSearchParams({
+        page: page.toString(),
+        page_size: limit.toString(),
+      });
+      if (textFilter) params.append("filter", textFilter);
+      if (prodiFilter && prodiFilter !== "all")
+        params.append("prodi_id", prodiFilter);
 
       const response = await fetch(
-        `${BASE_URL}/dosen/timetable/${dosenId}?page=${page}&page_size=${limit}&filter=${filter}`,
+        `${BASE_URL}/dosen/timetable/${dosenId}?${params.toString()}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (!response.ok) throw new Error("Gagal mengambil jadwal dosen");
-
       const data = await response.json();
       setTimetableData(data.data);
       setTotalPages(data.total_pages || 1);
     } catch (error) {
-      toast.error("Gagal mengambil jadwal dosen");
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -85,7 +116,7 @@ const DosenTimetable = () => {
   };
 
   const handleSearchClick = () => {
-    setFilter(searchInput);
+    setTextFilter(searchInput);
     setPage(1);
   };
 
@@ -103,14 +134,38 @@ const DosenTimetable = () => {
           </p>
         </CardHeader>
         <CardContent className="p-4">
-          {/* Search Bar */}
+          {/* Filters */}
           <div className="flex gap-2 mb-4">
             <Input
               placeholder="Cari berdasarkan nama atau kode mata kuliah"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full"
+              className="flex-1 min-w-[500px]"
             />
+            <Select
+              value={prodiFilter}
+              onValueChange={(value) => {
+                setProdiFilter(value);
+                setPage(1);
+              }}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Semua Program Studi" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key="option-all" value="all">
+                  Semua Program Studi
+                </SelectItem>
+                {prodiList.map((prodi) => (
+                  <SelectItem
+                    key={`prodi-${prodi.id}`}
+                    value={prodi.id.toString()}
+                  >
+                    {prodi.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Button
               onClick={handleSearchClick}
               className="bg-green-700 text-white"
@@ -130,7 +185,6 @@ const DosenTimetable = () => {
               <Table className="w-full border-collapse">
                 <TableHeader>
                   <TableRow className="bg-primary/5">
-                    {/* Fix: Remove extra whitespace */}
                     <TableHead>Kode Mata Kuliah</TableHead>
                     <TableHead>Mata Kuliah</TableHead>
                     <TableHead>Kelas</TableHead>
@@ -144,7 +198,6 @@ const DosenTimetable = () => {
                 <TableBody>
                   {timetableData.length === 0 ? (
                     <TableRow>
-                      {/* Fix: Remove extra whitespace */}
                       <TableCell colSpan="8" className="p-8 text-center">
                         <p className="text-lg font-medium">
                           Belum ada jadwal untuk Anda
@@ -157,10 +210,9 @@ const DosenTimetable = () => {
                   ) : (
                     timetableData.map((course) => (
                       <TableRow
-                        key={course.timetable_id}
+                        key={course.timetable_id + Math.random(0, 2)}
                         className="border-b border-border"
                       >
-                        {/* Fix: Remove extra whitespace */}
                         <TableCell>{course.kodemk}</TableCell>
                         <TableCell>{course.matakuliah}</TableCell>
                         <TableCell>{course.kelas}</TableCell>

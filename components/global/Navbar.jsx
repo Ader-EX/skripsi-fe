@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, Search, Timer } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Menu, Timer } from "lucide-react";
 import useAuthStore from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";

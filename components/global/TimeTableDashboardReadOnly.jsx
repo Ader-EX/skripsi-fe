@@ -135,10 +135,11 @@ const TimeTableDashboardReadOnly = () => {
                   </TableCell>
                   <TableCell>{schedule.class}</TableCell>
                   <TableCell>
-                    {schedule.lecturers
-                      ?.map((lecturer) => lecturer.name)
-                      .join(", ")}
+                    {schedule.lecturers?.map((lecturer, index) => (
+                      <div key={index}>{`${index + 1}. ${lecturer.name}`}</div>
+                    ))}
                   </TableCell>
+
                   <TableCell>{schedule.timeslots[0]?.day || "-"}</TableCell>
                   <TableCell>
                     {schedule.timeslots.length > 0 &&

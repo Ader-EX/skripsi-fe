@@ -17,9 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { LoadingOverlay } from "@/components/global/CustomLoadingOverlay";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
-import Link from "next/link";
 
 const AdminJadwal = () => {
   const [timetableData, setTimetableData] = useState(null);
@@ -32,10 +30,8 @@ const AdminJadwal = () => {
   const [conflicts, setConflicts] = useState([]);
   const [showConflictDialog, setShowConflictDialog] = useState(false);
   const [selectedDay, setSelectedDay] = useState("Senin");
-  // Added state for reset confirmation dialog
   const [showResetConfirmDialog, setShowResetConfirmDialog] = useState(false);
 
-  // Use 0-based indexing so that "Senin" is 0, matching your API data.
   const dayMapping = {
     Senin: 0,
     Selasa: 1,
@@ -63,7 +59,7 @@ const AdminJadwal = () => {
       if (search) {
         url.searchParams.append("search", search);
       }
-      // Append day_index from our 0-based mapping
+
       const dayIndex = dayMapping[selectedDay];
       url.searchParams.append("day_index", dayIndex);
 
@@ -85,7 +81,6 @@ const AdminJadwal = () => {
     }
   };
 
-  // Debounce search input
   const debouncedSearch = debounce((query) => {
     fetchTimetableData(query, selectedDay);
   }, 500);
@@ -94,7 +89,6 @@ const AdminJadwal = () => {
     fetchTimetableData();
   }, []);
 
-  // Re-fetch data when selectedDay changes
   useEffect(() => {
     fetchTimetableData(searchQuery, selectedDay);
   }, [selectedDay]);
@@ -109,7 +103,6 @@ const AdminJadwal = () => {
     fetchTimetableData(searchQuery, selectedDay);
   };
 
-  // Modified to show confirmation dialog first
   const handleResetButtonClick = () => {
     setShowResetConfirmDialog(true);
   };
@@ -301,7 +294,6 @@ const AdminJadwal = () => {
             </div>
           </div>
         </div>
-
         <div className="flex-1">
           <TimeTableView
             schedules={timetableData.schedules || []}
@@ -313,8 +305,7 @@ const AdminJadwal = () => {
             role="admin"
           />
         </div>
-
-        {/* Reset Confirmation Dialog in Bahasa Indonesia */}
+        =
         <Dialog
           open={showResetConfirmDialog}
           onOpenChange={setShowResetConfirmDialog}
@@ -344,7 +335,6 @@ const AdminJadwal = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-
         <Dialog open={showConflictDialog} onOpenChange={setShowConflictDialog}>
           <DialogContent>
             <DialogHeader>

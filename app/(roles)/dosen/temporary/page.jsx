@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import OpenedClassSelectionDialog from "@/components/global/OpenedClassSelectionDialog";
 import RuanganSelectionDialog from "@/components/global/RuanganSelectionDialog";
 import TimeslotSelectionTable from "../../admin/data-manajemen/edit/TimeslotSelectionTable";
 import toast from "react-hot-toast";
@@ -179,8 +178,6 @@ const AddTemporarySchedule = () => {
 
   return (
     <div className="p-8 flex flex-col w-full gap-y-6">
-      {/* (Card bagian atas tetap sama, tidak berubah) */}
-
       <Card>
         <CardHeader>
           <div

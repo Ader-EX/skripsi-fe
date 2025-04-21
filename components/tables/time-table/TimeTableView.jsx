@@ -48,7 +48,6 @@ const TimeTableView = ({ scheduleList, loading, fetchSchedules }) => {
   const router = useRouter();
   const token = Cookies.get("access_token");
 
-  // Loading overlay controls from context
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
   const handleDelete = async () => {
@@ -248,7 +247,6 @@ const TimeTableView = ({ scheduleList, loading, fetchSchedules }) => {
         </TableBody>
       </Table>
 
-      {/* Selected Schedule Details Dialog */}
       <Dialog
         open={!!selectedSchedule}
         onOpenChange={(open) => {
@@ -306,7 +304,6 @@ const TimeTableView = ({ scheduleList, loading, fetchSchedules }) => {
         </DialogContent>
       </Dialog>
 
-      {/* Conflict Resolution Dialog */}
       <Dialog open={showConflictDialog} onOpenChange={setShowConflictDialog}>
         <DialogContent>
           <DialogHeader>
