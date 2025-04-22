@@ -206,6 +206,9 @@ const AdminJadwal = () => {
       });
     } finally {
       setIsCheckingConflicts(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
     }
   };
 
