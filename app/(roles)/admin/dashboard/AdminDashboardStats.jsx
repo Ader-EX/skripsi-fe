@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie"; // Import CookiesJS
+import Cookies from "js-cookie";
 
 import { Book, Users, School, BookCheck } from "lucide-react";
 import { decodeToken } from "@/utils/decoder";
@@ -15,14 +15,12 @@ const AdminDashboardStats = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // Get token from cookies
         const token = Cookies.get("access_token");
 
         const payload = decodeToken(token);
 
         const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-        // Fetch dashboard stats
         const statsResponse = await fetch(`${API_URL}/admin/dashboard-stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });

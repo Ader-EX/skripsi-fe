@@ -105,7 +105,6 @@ const MahasiswaForm = ({ isOpen, onClose, initialData, onSubmit }) => {
         sks_diambil: parseInt(formData.sks_diambil),
       };
 
-      // Remove password if editing and no new password provided
       if (initialData && !payload.password) {
         delete payload.password;
       }
@@ -200,7 +199,6 @@ const MahasiswaForm = ({ isOpen, onClose, initialData, onSubmit }) => {
               </select>
             </div>
 
-            {/* Section 2: Academic Info */}
             <div>
               <Label>Semester</Label>
               <Input
@@ -250,7 +248,6 @@ const MahasiswaForm = ({ isOpen, onClose, initialData, onSubmit }) => {
               </select>
             </div>
 
-            {/* Section 3: Personal Info */}
             <div>
               <Label>Tanggal Lahir</Label>
               <Input
@@ -285,7 +282,6 @@ const MahasiswaForm = ({ isOpen, onClose, initialData, onSubmit }) => {
               <Input name="hp" value={formData.hp} onChange={handleChange} />
             </div>
 
-            {/* Section 4: Address */}
             <div className="col-span-3">
               <Label>Alamat</Label>
               <Input

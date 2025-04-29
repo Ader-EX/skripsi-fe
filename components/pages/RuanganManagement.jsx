@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
-// ✅ Define the base API URL with endpoint prefix
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ruangan/`;
 
 const RuanganManagement = () => {
@@ -29,15 +28,12 @@ const RuanganManagement = () => {
   const [currentRuangan, setCurrentRuangan] = useState(null);
   const token = Cookies.get("access_token");
 
-  // Overlay context for loading state
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
-  // Fetch ruangan data when filters/page/pageSize change
   useEffect(() => {
     fetchRuangan();
   }, [filters, page, pageSize]);
 
-  // ✅ Fetch ruangan data
   const fetchRuangan = async () => {
     try {
       setOverlayText("Memuat data ruangan...");
@@ -68,14 +64,12 @@ const RuanganManagement = () => {
     }
   };
 
-  // ✅ Handle edit action
   const handleEdit = (room) => {
     setCurrentRuangan(room);
     setIsEdit(true);
     setIsDialogOpen(true);
   };
 
-  // ✅ Handle delete action
   const handleDelete = async (kode_ruangan) => {
     try {
       const response = await fetch(`${API_URL}${kode_ruangan}`, {
@@ -95,7 +89,6 @@ const RuanganManagement = () => {
     }
   };
 
-  // ✅ Open form for add/edit ruangan
   const handleOpenForm = () => {
     setIsEdit(false);
     setCurrentRuangan(null);
@@ -165,7 +158,6 @@ const RuanganManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Form Modal for Add/Edit */}
       <RuanganForm
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

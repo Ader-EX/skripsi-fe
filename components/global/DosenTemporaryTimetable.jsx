@@ -142,7 +142,6 @@ const DosenTemporaryTimetable = () => {
               <Table className="w-full border-collapse">
                 <TableHeader>
                   <TableRow className="bg-green-700/5">
-                    {/* Fix: Remove whitespace */}
                     <TableHead>Kode MK</TableHead>
                     <TableHead>Mata Kuliah</TableHead>
                     <TableHead>Dosen</TableHead>
@@ -152,7 +151,6 @@ const DosenTemporaryTimetable = () => {
                     <TableHead>Tanggal Berakhir</TableHead>
                     <TableHead>Alasan</TableHead>
                     <TableHead>Aksi</TableHead>
-                    {/* Fix: Remove whitespace */}
                   </TableRow>
                 </TableHeader>
                 <TableBody>

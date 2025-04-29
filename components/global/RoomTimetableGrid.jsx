@@ -34,13 +34,12 @@ const EditTimetable = () => {
     kelas: "",
     ruangan_id: "",
     ruangan_nama: "",
-    timeslot_ids: [], // ✅ Multiple timeslot selection
+    timeslot_ids: [],
     sks: 3,
   };
 
   const [formData, setFormData] = useState(defaultFormData);
 
-  // Fetch Timetable Data (if editing)
   useEffect(() => {
     if (timetableId) {
       fetch(`${API_URL}/${timetableId}`, {
@@ -64,7 +63,7 @@ const EditTimetable = () => {
             kelas: data.kelas,
             ruangan_id: data.ruangan_id,
             ruangan_nama: data.ruangan?.kode_ruangan || "",
-            timeslot_ids: data.timeslot_ids, // ✅ Store timeslots as an array
+            timeslot_ids: data.timeslot_ids,
             sks: data.opened_class?.mata_kuliah?.sks || 3,
           });
         })
@@ -75,7 +74,6 @@ const EditTimetable = () => {
     }
   }, [timetableId]);
 
-  // Fetch Options (Timeslots, Opened Classes, Rooms)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -101,7 +99,6 @@ const EditTimetable = () => {
     fetchData();
   }, []);
 
-  // Handle Room Selection
   const handleRoomSelect = (roomId) => {
     setFormData((prev) => ({
       ...prev,
@@ -111,18 +108,16 @@ const EditTimetable = () => {
     }));
   };
 
-  // Handle Opened Class Selection
   const handleOpenedClassSelect = (classId) => {
     const selectedClass = openedClassList.find((oc) => oc.id === classId);
     setFormData((prev) => ({
       ...prev,
       opened_class_id: classId,
       mata_kuliah_nama: selectedClass?.mata_kuliah?.namamk || "",
-      sks: selectedClass?.mata_kuliah?.sks || 3, // ✅ Update SKS dynamically
+      sks: selectedClass?.mata_kuliah?.sks || 2,
     }));
   };
 
-  // Handle Timeslot Selection
   const handleSlotSelect = (selectedIds) => {
     if (selectedIds.length > formData.sks) {
       toast.error(`You can only select ${formData.sks} timeslots.`);
@@ -135,7 +130,6 @@ const EditTimetable = () => {
     }));
   };
 
-  // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

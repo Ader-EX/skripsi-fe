@@ -28,10 +28,10 @@ const MataKuliahTable = ({
   setPageSize,
   handleDelete,
   handleEdit,
-  fetchMataKuliah, // Fetch function passed from parent
+  fetchMataKuliah,
 }) => {
-  const totalPages = Math.ceil(total / pageSize); // Calculate total pages
-  const [searchQuery, setSearchQuery] = useState(filters.search || ""); // Local state for input
+  const totalPages = Math.ceil(total / pageSize);
+  const [searchQuery, setSearchQuery] = useState(filters.search || "");
 
   const handleSearch = () => {
     setFilters((prev) => ({ ...prev, search: searchQuery }));
@@ -49,7 +49,7 @@ const MataKuliahTable = ({
         />
         <Button
           className="bg-secondary hover:bg-secondary/90"
-          onClick={handleSearch} // 🔥 Only triggers search when button is clicked
+          onClick={handleSearch}
         >
           <Search className="h-4 w-4" />
         </Button>
@@ -162,7 +162,6 @@ const MataKuliahTable = ({
             <ChevronRight className="h-4 w-4" />
           </Button>
 
-          {/* Page Size Selector */}
           <select
             value={pageSize}
             onChange={(e) => setPageSize(Number(e.target.value))}

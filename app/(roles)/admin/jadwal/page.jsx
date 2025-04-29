@@ -196,7 +196,7 @@ const AdminJadwal = () => {
           description: "Please review the conflicts and resolve them",
         });
       } else {
-        toast.success("No conflicts found", {
+        toast.success("Tidak Ada Konflik", {
           description: "Your schedule is conflict-free",
         });
       }

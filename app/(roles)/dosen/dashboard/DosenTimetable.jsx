@@ -32,19 +32,17 @@ const DosenTimetable = () => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
 
-  // Pagination & Filters
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [textFilter, setTextFilter] = useState("");
   const [prodiList, setProdiList] = useState([]);
-  // default to 'all' to include every program studi
+
   const [prodiFilter, setProdiFilter] = useState("all");
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-  // Fetch program studi options on mount
   useEffect(() => {
     const fetchProdiList = async () => {
       try {
@@ -64,7 +62,6 @@ const DosenTimetable = () => {
     fetchProdiList();
   }, []);
 
-  // Fetch userId and timetable whenever filters change
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -109,7 +106,6 @@ const DosenTimetable = () => {
     }
   };
 
-  // Format Timeslot Display
   const formatSchedule = (schedule) => {
     if (!schedule) return "-";
     return schedule.replace("DayEnum.", "");

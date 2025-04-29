@@ -4,9 +4,7 @@ import React, { useEffect, useState } from "react";
 import DashboardStats from "./DashboardStats";
 import DosenTimetable from "./DosenTimetable";
 import DosenTemporaryTimetable from "@/components/global/DosenTemporaryTimetable";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { TriangleAlertIcon } from "lucide-react";
+
 import Cookies from "js-cookie";
 import { decodeToken } from "@/utils/decoder";
 import { useRouter } from "next/navigation";
@@ -19,12 +17,9 @@ const DosenDashboard = () => {
   useEffect(() => {
     const checkPreference = async () => {
       try {
-        // Get token from cookies
         const token = Cookies.get("access_token");
 
         const payload = decodeToken(token);
-
-        // Fetch preference status
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/preference/dosen/${payload.role_id}/has-preference`,
           {

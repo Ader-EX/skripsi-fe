@@ -10,7 +10,7 @@ import { jwtDecode } from "jwt-decode";
 
 export default function Navbar() {
   const [state, setState] = React.useState(false);
-  const [role, setRole] = React.useState("guest"); // Initialize role state
+  const [role, setRole] = React.useState("guest");
   const { token, logout } = useAuthStore();
   const router = useRouter();
 
@@ -19,14 +19,13 @@ export default function Navbar() {
     if (hasil) {
       try {
         const decoded = jwtDecode(hasil);
-        setRole(decoded.role || "guest"); // Update role state
+        setRole(decoded.role || "guest");
       } catch (error) {
         console.error("JWT Decode Error:", error);
       }
     }
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
-  // Define role-based dashboard URL
   const dashboardUrl =
     role === "mahasiswa"
       ? "/mahasiswa/dashboard"

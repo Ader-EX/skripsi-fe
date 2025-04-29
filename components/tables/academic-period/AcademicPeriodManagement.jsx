@@ -29,7 +29,6 @@ const AcademicPeriodManagement = () => {
   const [deleteId, setDeleteId] = useState(null);
   const token = Cookies.get("access_token");
 
-  // Get loading overlay controls from context
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
   useEffect(() => {

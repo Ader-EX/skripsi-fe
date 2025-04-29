@@ -32,7 +32,6 @@ const MahasiswaDashboard = () => {
   const [userId, setUserId] = useState(null);
   const [error, setError] = useState(null);
 
-  // Modal and pagination states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(3);
@@ -72,7 +71,6 @@ const MahasiswaDashboard = () => {
   };
 
   useEffect(() => {
-    // Fetch user data on component mount
     const fetchUserData = async () => {
       try {
         const token = Cookies.get("access_token");
@@ -115,7 +113,6 @@ const MahasiswaDashboard = () => {
 
       const data = await response.json();
 
-      // Format lecturers from the dosen string
       const formatLecturers = (dosenString) => {
         if (!dosenString) return [];
         return dosenString.split("\n").map((lecturer) => {
@@ -124,7 +121,6 @@ const MahasiswaDashboard = () => {
         });
       };
 
-      // Ensure each course has proper structure and formatting
       const formattedData = data.data.map((course) => ({
         ...course,
         timetable_id: course.timetable_id || course.id,
@@ -146,20 +142,18 @@ const MahasiswaDashboard = () => {
         lecturers: formatLecturers(course.dosen),
       }));
 
-      setSelectedCourses(formattedData); // ✅ Updates UI **immediately**
+      setSelectedCourses(formattedData);
     } catch (error) {
       console.error("Error fetching student timetable:", error);
       toast.error("Failed to fetch student timetable");
     }
   };
 
-  // Update the formatTimeslots function to handle the new time format
   const formatTimeslots = (timeslots) => {
     if (!timeslots || !Array.isArray(timeslots) || timeslots.length === 0) {
       return "-";
     }
 
-    // Filter out invalid timeslots and ensure all required properties exist
     const validTimeslots = timeslots.filter(
       (slot) =>
         slot &&
@@ -172,7 +166,6 @@ const MahasiswaDashboard = () => {
       return "-";
     }
 
-    // Sort timeslots by startTime, with null-safe comparison
     const sortedTimeslots = [...validTimeslots].sort((a, b) => {
       const aTime = a.startTime || a.start_time;
       const bTime = b.startTime || b.start_time;
@@ -184,7 +177,6 @@ const MahasiswaDashboard = () => {
     const firstSlot = sortedTimeslots[0];
     const lastSlot = sortedTimeslots[sortedTimeslots.length - 1];
 
-    // Handle both startTime/endTime and start_time/end_time formats
     const startTime = firstSlot.startTime || firstSlot.start_time;
     const endTime = lastSlot.endTime || lastSlot.end_time;
 
@@ -192,15 +184,15 @@ const MahasiswaDashboard = () => {
   };
 
   const applySearch = () => {
-    setFilter(searchValue); // Apply search when button is clicked
-    fetchAvailableCourses(1, searchValue); // Call API with search value
+    setFilter(searchValue);
+    fetchAvailableCourses(1, searchValue);
   };
 
   const handleRemoveCourse = async (course, mahasiswa_id) => {
     const toastId = toast.loading("Menghapus jadwal...");
 
     try {
-      const timetableId = course.timetable_id || course.id; // ✅ Ensure correct ID usage
+      const timetableId = course.timetable_id || course.id;
 
       if (!timetableId) {
         throw new Error("Timetable ID is undefined");
@@ -218,7 +210,6 @@ const MahasiswaDashboard = () => {
         throw new Error("Failed to delete timetable entry");
       }
 
-      // ✅ Filter courses correctly
       setSelectedCourses((prevCourses) =>
         prevCourses.filter((c) => (c.timetable_id || c.id) !== timetableId)
       );
@@ -274,7 +265,6 @@ const MahasiswaDashboard = () => {
     const selectedKodemk = selectedCourseToAdd.subject?.code;
     const selectedClass = selectedCourseToAdd.class;
 
-    // Prevent selecting the same kodemk with different classes
     const isDuplicateKodemk = selectedCourses.some(
       (course) =>
         course.subject?.code === selectedKodemk &&
@@ -327,7 +317,7 @@ const MahasiswaDashboard = () => {
         body: JSON.stringify({
           mahasiswa_id: Number(userId),
           timetable_id: selectedCourseToAdd.id,
-          academic_period_id: academicPeriodId, // ✅ Use academic period ID
+          academic_period_id: academicPeriodId,
         }),
       });
 
@@ -399,7 +389,6 @@ const MahasiswaDashboard = () => {
           </p>
         </CardHeader>
         <CardContent className="p-4">
-          {/* Selected Courses Table */}
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
@@ -495,8 +484,6 @@ const MahasiswaDashboard = () => {
             </table>
           </div>
 
-          {/* Course Selection Section */}
-
           <ol className="text-sm text-text-secondary mt-4">
             <li>
               1. Pastikan mata kuliah yang dipilih tidak memiliki jadwal yang
@@ -528,7 +515,6 @@ const MahasiswaDashboard = () => {
             <DialogTitle>Pilih Mata Kuliah</DialogTitle>
           </DialogHeader>
 
-          {/* Filter Input */}
           <div className="flex gap-2 mb-4">
             <Input
               placeholder="Cari Mata Kuliah (Nama/Kode)"
@@ -542,7 +528,6 @@ const MahasiswaDashboard = () => {
             </Button>
           </div>
 
-          {/* Courses Table */}
           {isCoursesLoading ? (
             <div className="flex justify-center items-center h-64">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -581,7 +566,6 @@ const MahasiswaDashboard = () => {
                         />
                       </TableCell>
 
-                      {/* ✅ Correctly displaying subject code & name */}
                       <TableCell>{course.subject?.code || "-"}</TableCell>
                       <TableCell>{course.subject?.name || "Unknown"}</TableCell>
 
@@ -589,10 +573,8 @@ const MahasiswaDashboard = () => {
                       <TableCell>{course.subject?.sks || "-"}</TableCell>
                       <TableCell>{course.subject?.semester || "-"}</TableCell>
 
-                      {/* ✅ Properly formatted Timeslot */}
                       <TableCell>{formatTimeslots(course.timeslots)}</TableCell>
 
-                      {/* ✅ Properly formatted Lecturers */}
                       <TableCell>
                         {course.lecturers
                           ?.map((lecturer) => lecturer.name)
@@ -610,7 +592,7 @@ const MahasiswaDashboard = () => {
                   onClick={() => handlePageChange(page - 1)}
                   disabled={page === 1}
                 >
-                  <ChevronLeft className="mr-2" /> Previous
+                  <ChevronLeft className="mr-2" /> Sebelumnya
                 </Button>
                 <span>
                   Page {page} of {totalPages}
@@ -620,13 +602,12 @@ const MahasiswaDashboard = () => {
                   onClick={() => handlePageChange(page + 1)}
                   disabled={page === totalPages}
                 >
-                  Next <ChevronRight className="ml-2" />
+                  Berikutnya <ChevronRight className="ml-2" />
                 </Button>
               </div>
             </>
           )}
 
-          {/* Modal Actions */}
           <div className="flex justify-end space-x-2 mt-4">
             <Button variant="outline" onClick={() => setIsModalOpen(false)}>
               Batal

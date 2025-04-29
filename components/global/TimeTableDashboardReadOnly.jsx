@@ -28,9 +28,7 @@ const TimeTableDashboardReadOnly = () => {
   const [scheduleList, setScheduleList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
-  // searchInput is updated on every keystroke
   const [searchInput, setSearchInput] = useState("");
-  // appliedFilter is used to actually fetch the data
   const [appliedFilter, setAppliedFilter] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -41,7 +39,6 @@ const TimeTableDashboardReadOnly = () => {
     try {
       const params = new URLSearchParams();
       params.append("page", pageNumber);
-      // Use appliedFilter here so API is called with the search term only when applied
       if (appliedFilter) params.append("filterText", appliedFilter);
 
       const response = await fetch(`${API_URL}?${params.toString()}`, {
@@ -60,14 +57,12 @@ const TimeTableDashboardReadOnly = () => {
     }
   };
 
-  // Only trigger fetching when pageNumber or appliedFilter changes
   useEffect(() => {
     fetchSchedules();
   }, [pageNumber, appliedFilter]);
 
   const handleSearch = () => {
     setPageNumber(1);
-    // update the applied filter so the useEffect calls fetchSchedules
     setAppliedFilter(searchInput);
   };
 

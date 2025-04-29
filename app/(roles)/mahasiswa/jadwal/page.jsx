@@ -45,7 +45,6 @@ const MahasiswaJadwal = () => {
         url.searchParams.append("search", search);
       }
 
-      // Get the index for the selected day
       const dayIndex = dayMapping[selectedDay];
       url.searchParams.append("day_index", dayIndex);
 
@@ -77,7 +76,6 @@ const MahasiswaJadwal = () => {
     setSearchQuery(e.target.value);
   };
 
-  // FIXED: Use the current selectedDay instead of a hardcoded "1"
   const handleSearchSubmit = () => {
     fetchTimetableData(searchQuery, selectedDay);
   };

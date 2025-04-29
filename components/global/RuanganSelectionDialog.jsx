@@ -24,7 +24,7 @@ const RUANGAN_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ruangan/`;
 
 const RuanganSelectionDialog = ({ isOpen, onClose, onSelect }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // Search is applied only when button is clicked
+  const [searchQuery, setSearchQuery] = useState("");
   const [ruanganList, setRuanganList] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -57,7 +57,7 @@ const RuanganSelectionDialog = ({ isOpen, onClose, onSelect }) => {
   };
 
   const handleSearch = () => {
-    setPage(1); // Reset to the first page when searching
+    setPage(1);
     setSearchQuery(searchTerm);
   };
 

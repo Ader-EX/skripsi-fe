@@ -142,7 +142,6 @@ const TimeTableView = ({
 
     const room = schedule.room_id || "-";
 
-    // Buat schedule string dari time_slots
     const timeslots = schedule.time_slots || [];
     const day = timeslots.length > 0 ? timeslots[0].day : "-";
     const startTime = timeslots.length > 0 ? timeslots[0].start_time : "-";
@@ -204,7 +203,7 @@ const TimeTableView = ({
               {selectedConflict.reason}
             </p>
             <p>
-              Severity:{" "}
+              Keterangan:{" "}
               <strong>{selectedConflict.severity || "Unknown"}</strong>
             </p>
             <p>Room: {selectedConflict.room_id}</p>

@@ -30,7 +30,6 @@ const MahasiswaTimeTableManagement = () => {
   const [error, setError] = useState(null);
   const token = Cookies.get("access_token");
 
-  // Get overlay functions from context
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
   useEffect(() => {
@@ -125,7 +124,6 @@ const MahasiswaTimeTableManagement = () => {
 
   return (
     <div className="space-y-4">
-      {/* Input Field for Selecting Mahasiswa */}
       <div>
         <Label>Pilih Mahasiswa</Label>
         <Input
@@ -137,7 +135,6 @@ const MahasiswaTimeTableManagement = () => {
         />
       </div>
 
-      {/* Dialog for Searching Mahasiswa */}
       <Dialog open={isModalOpen} onOpenChange={handleModalClose}>
         <DialogContent>
           <DialogHeader>
@@ -199,7 +196,6 @@ const MahasiswaTimeTableManagement = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Table is always visible, even when no mahasiswa is selected */}
       <div className="p-4 border rounded-lg">
         <h3 className="text-lg font-semibold mb-4">Timetable:</h3>
 

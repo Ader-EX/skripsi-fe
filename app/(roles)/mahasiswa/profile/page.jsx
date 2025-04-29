@@ -30,7 +30,7 @@ const MahasiswaProfile = () => {
     nama: "",
     tgl_lahir: "",
     kota_lahir: "",
-    jenis_kelamin: "L", // Underlying value "L" by default
+    jenis_kelamin: "L",
     alamat: "",
     kode_pos: "",
     hp: "",
@@ -76,7 +76,7 @@ const MahasiswaProfile = () => {
         ...data,
         tgl_lahir: data.tgl_lahir || "",
         kota_lahir: data.kota_lahir || "",
-        // Set jenis_kelamin to underlying value; default to "L" if not provided.
+
         jenis_kelamin: data.jenis_kelamin || "L",
         kode_pos: data.kode_pos || "",
         nama_ayah: data.nama_ayah || "",
@@ -278,7 +278,6 @@ const MahasiswaProfile = () => {
               </div>
             </section>
 
-            {/* Contact Information Section */}
             <section className="p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
                 Contact Information
@@ -343,7 +342,6 @@ const MahasiswaProfile = () => {
               </div>
             </section>
 
-            {/* Form Actions */}
             <section className="p-6 bg-gray-50">
               <div className="flex justify-end space-x-4">
                 <Button
@@ -353,7 +351,7 @@ const MahasiswaProfile = () => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Save Changes</Button>
+                <Button type="submit">Simpan Perubahan</Button>
               </div>
             </section>
           </form>

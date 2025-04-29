@@ -58,7 +58,6 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
         nidn: initialData.nidn || "",
         nomor_ktp: initialData.nomor_ktp || "",
         nama: initialData.nama || "",
-        // Convert initial date to ISO format for the date input
         tanggal_lahir: initialData.tanggal_lahir
           ? convertToInputDateFormat(initialData.tanggal_lahir)
           : "",

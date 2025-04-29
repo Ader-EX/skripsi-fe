@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useLoadingOverlay } from "@/app/context/LoadingOverlayContext";
 
-// ✅ Directly define the API URL with the endpoint
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/matakuliah/`;
 const PROGRAM_STUDI_URL = `${process.env.NEXT_PUBLIC_API_URL}/program-studi/`;
 
@@ -42,7 +41,6 @@ const MataKuliahManagement = () => {
     fetchProgramStudi();
   }, []);
 
-  // ✅ Fetch MataKuliah data
   const fetchMataKuliah = async () => {
     try {
       setOverlayText("Memuat data mata kuliah...");
@@ -53,7 +51,6 @@ const MataKuliahManagement = () => {
         page_size: pageSize,
       });
 
-      // Only append filters if they have valid values
       if (filters.semester && filters.semester !== "Semua") {
         queryParams.append("semester", filters.semester);
       }
@@ -87,7 +84,6 @@ const MataKuliahManagement = () => {
     }
   };
 
-  // ✅ Fetch Program Studi data
   const fetchProgramStudi = async () => {
     try {
       setOverlayText("Memuat data program studi...");
@@ -129,7 +125,6 @@ const MataKuliahManagement = () => {
     }
   };
 
-  // ✅ Open form for add/edit
   const handleOpenForm = (matakuliah = null) => {
     setCurrentMataKuliah(matakuliah);
     setIsEdit(!!matakuliah);
@@ -169,37 +164,9 @@ const MataKuliahManagement = () => {
             handleEdit={handleOpenForm}
             fetchMataKuliah={fetchMataKuliah}
           />
-
-          {/* Optional Pagination Buttons */}
-          {/* <div className="flex justify-between items-center mt-4">
-            <Button
-              disabled={page === 1}
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              className="flex items-center"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Sebelumnya
-            </Button>
-            <span className="text-sm">
-              Halaman {page} dari {Math.ceil(total / pageSize) || 1}
-            </span>
-            <Button
-              disabled={page >= Math.ceil(total / pageSize)}
-              onClick={() =>
-                setPage((prev) =>
-                  Math.min(prev + 1, Math.ceil(total / pageSize))
-                )
-              }
-              className="flex items-center"
-            >
-              Selanjutnya
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
-          </div> */}
         </CardContent>
       </Card>
 
-      {/* Form Modal */}
       <MataKuliahForm
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

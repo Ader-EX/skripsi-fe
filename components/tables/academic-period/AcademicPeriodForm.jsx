@@ -30,7 +30,7 @@ const AcademicPeriodForm = ({ isOpen, onClose, onSubmit, initialData }) => {
       semester: "",
       start_date: "",
       end_date: "",
-      is_active: false, // New academic period should default to inactive
+      is_active: false,
     }
   );
 
@@ -86,8 +86,8 @@ const AcademicPeriodForm = ({ isOpen, onClose, onSubmit, initialData }) => {
       });
 
       if (response.ok) {
-        onSubmit(); // Refresh academic periods
-        onClose(); // Close form
+        onSubmit();
+        onClose();
       } else {
         const errorData = await response.json();
         toast.error(`Gagal menyimpan data, pastikan data sudah terisi semua`);

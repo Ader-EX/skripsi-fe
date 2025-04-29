@@ -54,7 +54,7 @@ const OpenedClassSelectionDialog = ({
 
       const data = await response.json();
       setOpenedClassList(data.data || []);
-      setTotalPages(data.total_pages || 1); // Ensure total_pages is used from API
+      setTotalPages(data.total_pages || 1);
     } catch (error) {
       console.error("Error fetching Opened Classes:", error);
     } finally {
@@ -63,7 +63,7 @@ const OpenedClassSelectionDialog = ({
   };
 
   const handleSearch = () => {
-    setPage(1); // Reset to the first page before searching
+    setPage(1);
     setSearchQuery(searchTerm);
   };
 

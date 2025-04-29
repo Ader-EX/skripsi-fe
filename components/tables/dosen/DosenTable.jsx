@@ -40,11 +40,7 @@ const DosenTable = ({ dosenList, onEdit, onDelete }) => {
             <TableRow key={dosen.pegawai_id || `dosen-${index}`}>
               <TableCell>{dosen.pegawai_id || "-"}</TableCell>
               <TableCell>
-                {[
-                  dosen.title_depan,
-                  dosen.nama, // ✅ Ensure NIM/NIP is displayed properly
-                  dosen.title_belakang,
-                ]
+                {[dosen.title_depan, dosen.nama, dosen.title_belakang]
                   .filter(Boolean)
                   .join(" ") || "-"}
               </TableCell>
@@ -82,7 +78,6 @@ const DosenTable = ({ dosenList, onEdit, onDelete }) => {
         </TableBody>
       </Table>
 
-      {/* ✅ Dialog for viewing details */}
       {selectedDosen && (
         <Dialog
           open={selectedDosen !== null}
