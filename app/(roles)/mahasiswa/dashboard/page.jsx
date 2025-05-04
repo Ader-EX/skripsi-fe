@@ -341,26 +341,11 @@ const MahasiswaDashboard = () => {
     }
   };
 
-  const handleFilterChange = (e) => {
-    const filterText = e.target.value;
-    setFilter(filterText);
-    fetchAvailableCourses(1, filterText);
-  };
-
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setPage(newPage);
       fetchAvailableCourses(newPage, filter);
     }
-  };
-
-  // Remove a selected course
-  const removeCourse = (courseToRemove) => {
-    setSelectedCourses(
-      selectedCourses.filter(
-        (course) => course.kodemk !== courseToRemove.kodemk
-      )
-    );
   };
 
   return (

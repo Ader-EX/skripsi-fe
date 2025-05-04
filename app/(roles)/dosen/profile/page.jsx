@@ -27,11 +27,10 @@ const DosenProfile = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Form data now includes all fields required by the model.
   const [formData, setFormData] = useState({
     nama: "",
     nidn: "",
-    nip: "", // This holds nim_nip (read-only)
+    nip: "",
     nomorKtp: "",
     tanggalLahir: "",
     progdiId: "",
@@ -89,7 +88,6 @@ const DosenProfile = () => {
     }
   };
 
-  // Converts date to "YYYY-MM-DD" if not already in that format.
   const formatDate = (dateString) => {
     if (dateString.includes("-")) return dateString;
     const [day, month, year] = dateString.split("/");
@@ -119,13 +117,12 @@ const DosenProfile = () => {
     try {
       if (!userId) throw new Error("User ID not found");
 
-      // Build update payload matching the model:
       const updateData = {
-        nim_nip: formData.nip, // required for user update (read-only field)
+        nim_nip: formData.nip,
         nama: formData.nama,
         nidn: formData.nidn,
         nomor_ktp: formData.nomorKtp,
-        tanggal_lahir: formData.tanggalLahir, // expecting YYYY-MM-DD format
+        tanggal_lahir: formData.tanggalLahir,
         progdi_id: formData.progdiId,
         status_dosen: formData.statusDosen,
         jabatan: formData.jabatan,
@@ -134,7 +131,6 @@ const DosenProfile = () => {
         email: formData.email,
       };
 
-      // Include password only if the user provided a new one.
       if (formData.password.trim() !== "") {
         updateData.password = formData.password;
       }

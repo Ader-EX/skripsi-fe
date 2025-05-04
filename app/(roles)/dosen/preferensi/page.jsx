@@ -132,7 +132,6 @@ const DosenPreferensi = () => {
 
       setPreferences(Array.isArray(data) ? data : []);
 
-      // Check if any preference has `is_special_needs: true`
       const hasSpecialNeeds = data.some(
         (pref) => pref.is_special_needs === true
       );

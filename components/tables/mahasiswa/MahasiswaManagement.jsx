@@ -37,8 +37,8 @@ const MahasiswaManagement = () => {
   const [programStudiList, setProgramStudiList] = useState([]);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState({
-    semester: "all", // default to "all"
-    program_studi_id: "all", // default to "all"
+    semester: "all", 
+    program_studi_id: "all", 
     search: "",
   });
   const [page, setPage] = useState(1);

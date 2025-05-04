@@ -34,7 +34,6 @@ const TimeTableView = ({
   selectedDay,
   onDayChange = () => {},
 }) => {
-  // Use available days from filters; fallback if not provided.
   const [DAYS, setDAYS] = useState(filters?.available_days || ["Senin"]);
   const [selectedBuilding, setSelectedBuilding] = useState("all");
   const [selectedConflict, setSelectedConflict] = useState(null);

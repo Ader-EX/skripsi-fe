@@ -15,7 +15,6 @@ const DashboardStats = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // Get token from cookies
         const token = Cookies.get("access_token");
 
         const payload = decodeToken(token);

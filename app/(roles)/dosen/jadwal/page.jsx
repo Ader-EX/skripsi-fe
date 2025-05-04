@@ -45,7 +45,6 @@ const MahasiswaJadwal = () => {
         url.searchParams.append("search", search);
       }
 
-      // Get the index for the selected day
       const dayIndex = dayMapping[selectedDay];
       url.searchParams.append("day_index", dayIndex);
 

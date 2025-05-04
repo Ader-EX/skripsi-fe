@@ -24,7 +24,6 @@ const TimeTableForm = ({ isOpen, onClose, initialData, onSubmit }) => {
   const [isDosenDialogOpen, setIsDosenDialogOpen] = useState(false);
   const token = Cookies.get("access_token");
 
-  // Default form data
   const defaultFormData = {
     matakuliah_id: "",
     matakuliah_nama: "",
@@ -38,7 +37,6 @@ const TimeTableForm = ({ isOpen, onClose, initialData, onSubmit }) => {
     is_active: true,
   };
 
-  // Initialize form state with default or initialData
   const [formData, setFormData] = useState(defaultFormData);
 
   useEffect(() => {

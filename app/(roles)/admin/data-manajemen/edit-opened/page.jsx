@@ -145,7 +145,7 @@ const EditOpenedClass = () => {
         },
         body: JSON.stringify({
           mata_kuliah_kodemk: selectedMataKuliah.kodemk,
-          kelas, // now one of A-L
+          kelas,
           kapasitas: parseInt(kapasitas, 10),
           dosens: selectedDosen.map((d) => ({
             id: d.id,
@@ -176,7 +176,6 @@ const EditOpenedClass = () => {
     );
   }
 
-  // Options for class selection (A-L)
   const classOptions = "ABCDEFGHIJKLMNOPQ".split("");
 
   return (

@@ -5,6 +5,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import RuanganSelectionDialog from "@/components/global/RuanganSelectionDialog";
 import TimeslotSelectionTable from "../../admin/data-manajemen/edit/TimeslotSelectionTable";
 import toast from "react-hot-toast";
@@ -26,6 +35,7 @@ const AddTemporarySchedule = () => {
   const [isRuanganDialogOpen, setIsRuanganDialogOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [academicPeriodId, setAcademicPeriodId] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
 
   const [timetableTimeslots, setTimetableTimeslots] = useState([]);
   const [alasan, setAlasan] = useState("");
@@ -126,17 +136,23 @@ const AddTemporarySchedule = () => {
         : [...prevSelected, timeslotId]
     );
   };
+
   const handleSubmit = async () => {
     if (
       !selectedOpenedClass ||
       !selectedRuangan ||
-      selectedTimeslots.length === 0
+      selectedTimeslots.length === 0 ||
+      !startDate
     ) {
       toast.error(
-        "Pilih kelas yang tersedia, ruangan, dan minimal satu waktu."
+        "Pilih kelas yang tersedia, ruangan, tanggal pengganti, dan minimal satu waktu."
       );
       return;
     }
+
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 7);
 
     try {
       const response = await fetch(`${API_URL}/temporary-timetable/`, {
@@ -151,11 +167,9 @@ const AddTemporarySchedule = () => {
           new_timeslot_ids: selectedTimeslots,
           new_day: null,
           change_reason: alasan,
-          start_date: new Date().toISOString(),
+          start_date: format(startDate, "yyyy-MM-dd"),
+          end_date: format(endDate, "yyyy-MM-dd"),
           academic_period_id: academicPeriodId,
-          end_date: new Date(
-            new Date().setDate(new Date().getDate() + 7)
-          ).toISOString(),
           created_by: "dosen",
         }),
       });
@@ -175,6 +189,11 @@ const AddTemporarySchedule = () => {
   };
 
   if (!isMounted) return null;
+
+  const normalizedStartDate = new Date(startDate);
+  normalizedStartDate.setHours(0, 0, 0, 0);
+
+  const startDateIso = normalizedStartDate.toISOString();
 
   return (
     <div className="p-8 flex flex-col w-full gap-y-6">
@@ -204,8 +223,39 @@ const AddTemporarySchedule = () => {
             value={selectedRuangan ? `${selectedRuangan.nama_ruang}` : ""}
             readOnly
             onClick={() => setIsRuanganDialogOpen(true)}
-            className="cursor-pointer"
+            className="cursor-pointer mb-4"
           />
+
+          <Label className="mt-6">Tanggal Pengganti</Label>
+          <div className="mb-4">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !startDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {startDate ? (
+                    format(startDate, "PPP")
+                  ) : (
+                    <span>Pilih tanggal</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  className={"bg-white"}
+                  mode="single"
+                  selected={startDate}
+                  onSelect={setStartDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
           <Label className="mt-4">Alasan</Label>
           <Input value={alasan} onChange={(e) => setAlasan(e.target.value)} />

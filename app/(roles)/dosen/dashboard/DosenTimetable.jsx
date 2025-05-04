@@ -217,16 +217,18 @@ const DosenTimetable = () => {
                         <TableCell>{course.ruangan}</TableCell>
                         <TableCell>{course.dosen}</TableCell>
                         <TableCell>
-                          <Button
-                            className="bg-green-700 text-white text-xs"
-                            onClick={() =>
-                              router.push(
-                                `/dosen/temporary?id=${course.timetable_id}`
-                              )
-                            }
-                          >
-                            Buat Pengganti
-                          </Button>
+                          {!course.has_temporary && (
+                            <Button
+                              className="bg-green-700 text-white text-xs"
+                              onClick={() =>
+                                router.push(
+                                  `/dosen/temporary?id=${course.timetable_id}`
+                                )
+                              }
+                            >
+                              Buat Pengganti
+                            </Button>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))

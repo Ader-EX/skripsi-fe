@@ -43,7 +43,6 @@ const DosenManagement = () => {
   const [search, setSearch] = useState("");
   const token = Cookies.get("access_token");
 
-  // Get overlay controls from context
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
   useEffect(() => {
@@ -53,7 +52,6 @@ const DosenManagement = () => {
   const fetchDosen = async () => {
     setLoading(true);
     try {
-      // Activate overlay with custom message before fetch
       setOverlayText("Memuat data dosen...");
       setIsActive(true);
 
@@ -77,7 +75,7 @@ const DosenManagement = () => {
       console.error("Error fetching dosen:", error);
     } finally {
       setLoading(false);
-      setIsActive(false); // Hide overlay after fetch completes
+      setIsActive(false);
     }
   };
 

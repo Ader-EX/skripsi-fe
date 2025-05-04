@@ -26,13 +26,12 @@ const OpenedClassManagement = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentSearch, setCurrentSearch] = useState(""); // Active search term
+  const [currentSearch, setCurrentSearch] = useState(""); 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const limit = 10;
   const token = Cookies.get("access_token");
 
-  // Get overlay controls from context
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const OpenedClassManagement = () => {
   const fetchClasses = async () => {
     setLoading(true);
     try {
-      // Activate the loading overlay with a custom message
+
       setOverlayText("Memuat data kelas...");
       setIsActive(true);
 
@@ -64,7 +63,7 @@ const OpenedClassManagement = () => {
       console.error("Error fetching classes:", error);
     } finally {
       setLoading(false);
-      setIsActive(false); // Hide the overlay
+      setIsActive(false); 
     }
   };
 

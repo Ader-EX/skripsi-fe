@@ -105,7 +105,7 @@ const MataKuliahManagement = () => {
     }
   };
 
-  // ✅ Delete Mata Kuliah by kode
+
   const handleDeleteConfirm = async (kodemk) => {
     try {
       const response = await fetch(`${API_URL}${kodemk}`, {

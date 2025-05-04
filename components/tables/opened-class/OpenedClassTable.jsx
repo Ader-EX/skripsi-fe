@@ -21,8 +21,8 @@ const getTipeMKLabel = (tipe) => {
 export const OpenedClassTable = ({ classList, onDelete, loading }) => {
   const router = useRouter();
   const [selectedClass, setSelectedClass] = useState(null);
-  const searchParams = useSearchParams(); // ✅ Get current searchParams
-  const pathname = usePathname(); // ✅ Get current pathname
+  const searchParams = useSearchParams();
+  const pathname = usePathname(); 
 
   if (loading) {
     return <div className="text-center py-4">Loading...</div>;
@@ -73,10 +73,10 @@ export const OpenedClassTable = ({ classList, onDelete, loading }) => {
                     variant="outline"
                     onClick={() => {
                       const newParams = new URLSearchParams(searchParams);
-                      newParams.set("id", classItem.id); // ✅ Set opened_class_id in searchParams
+                      newParams.set("id", classItem.id); 
                       router.push(
                         `${pathname}/edit-opened?${newParams.toString()}`
-                      ); // ✅ Updates URL without full reload
+                      ); 
                     }}
                   >
                     <Pencil className="h-4 w-4" />

@@ -147,8 +147,8 @@ const DosenTemporaryTimetable = () => {
                     <TableHead>Dosen</TableHead>
                     <TableHead>Ruangan</TableHead>
                     <TableHead>Jadwal</TableHead>
-                    <TableHead>Tanggal Mulai</TableHead>
-                    <TableHead>Tanggal Berakhir</TableHead>
+                    <TableHead>Tanggal Pengganti</TableHead>
+
                     <TableHead>Alasan</TableHead>
                     <TableHead>Aksi</TableHead>
                   </TableRow>
@@ -169,11 +169,17 @@ const DosenTemporaryTimetable = () => {
                         <TableCell>{temp.ruangan}</TableCell>
                         <TableCell>{temp.schedule.split(".").pop()}</TableCell>
                         <TableCell>
-                          {new Date(temp.start_date).toLocaleDateString()}
+                          {new Date(temp.start_date).toLocaleDateString(
+                            "id-ID",
+                            {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )}
                         </TableCell>
-                        <TableCell>
-                          {new Date(temp.end_date).toLocaleDateString()}
-                        </TableCell>
+
                         <TableCell>{temp.change_reason}</TableCell>
                         <TableCell>
                           <Button

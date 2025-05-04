@@ -34,10 +34,10 @@ const DosenTimeTableManagement = () => {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const token = Cookies.get("access_token");
 
-  // Loading overlay controls from context
+
   const { setIsActive, setOverlayText } = useLoadingOverlay();
 
-  // When a dosen is selected, fetch its timetable
+
   useEffect(() => {
     if (selectedDosen?.id) {
       fetchTimetables();
@@ -48,7 +48,7 @@ const DosenTimeTableManagement = () => {
     try {
       setIsLoading(true);
       setError(null);
-      // Show overlay while fetching dosen data
+
       setOverlayText("Memuat data dosen...");
       setIsActive(true);
       const response = await fetch(
@@ -75,7 +75,7 @@ const DosenTimeTableManagement = () => {
     try {
       setIsLoading(true);
       setError(null);
-      // Show overlay while fetching timetable data
+
       setOverlayText("Memuat jadwal dosen...");
       setIsActive(true);
       const response = await fetch(
@@ -122,7 +122,7 @@ const DosenTimeTableManagement = () => {
         }
       );
       if (!response.ok) throw new Error("Failed to delete timetable");
-      // Remove the deleted entry from the timetable list
+  
       setTimetableList((prev) =>
         prev.filter((item) => item.timetable_id !== confirmDelete)
       );

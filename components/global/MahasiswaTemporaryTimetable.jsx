@@ -144,8 +144,8 @@ const MahasiswaTemporaryTimetable = () => {
                     <TableHead>Dosen</TableHead>
                     <TableHead>Ruangan</TableHead>
                     <TableHead>Timeslots</TableHead>
-                    <TableHead>Tanggal Mulai</TableHead>
-                    <TableHead>Tanggal Berakhir</TableHead>
+                    <TableHead>Tanggal Pengganti</TableHead>
+
                     <TableHead>Alasan</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -165,10 +165,15 @@ const MahasiswaTemporaryTimetable = () => {
                         <TableCell>{temp.ruangan}</TableCell>
                         <TableCell>{formatTimeslots(temp.schedule)}</TableCell>
                         <TableCell>
-                          {new Date(temp.start_date).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(temp.end_date).toLocaleDateString()}
+                          {new Date(temp.start_date).toLocaleDateString(
+                            "id-ID",
+                            {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )}
                         </TableCell>
                         <TableCell>{temp.change_reason || "-"}</TableCell>
                       </TableRow>
