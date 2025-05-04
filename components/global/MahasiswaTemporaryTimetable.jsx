@@ -143,7 +143,7 @@ const MahasiswaTemporaryTimetable = () => {
                     <TableHead>Mata Kuliah</TableHead>
                     <TableHead>Dosen</TableHead>
                     <TableHead>Ruangan</TableHead>
-                    <TableHead>Timeslots</TableHead>
+                    <TableHead>Waktu</TableHead>
                     <TableHead>Tanggal Pengganti</TableHead>
 
                     <TableHead>Alasan</TableHead>
