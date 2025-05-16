@@ -61,7 +61,7 @@ const TimeslotSelectionTable = ({
                         }
                         disabled={
                           timeslot.status === "Busy" &&
-                          !timetableTimeslots.includes(timeslot.timeslot_id) // Enable if previously selected
+                          !timetableTimeslots.includes(timeslot.timeslot_id)
                         }
                       />
                     ) : (

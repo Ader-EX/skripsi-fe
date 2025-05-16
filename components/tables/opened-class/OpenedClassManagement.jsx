@@ -26,7 +26,7 @@ const OpenedClassManagement = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentSearch, setCurrentSearch] = useState(""); 
+  const [currentSearch, setCurrentSearch] = useState("");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const limit = 10;
@@ -41,7 +41,6 @@ const OpenedClassManagement = () => {
   const fetchClasses = async () => {
     setLoading(true);
     try {
-
       setOverlayText("Memuat data kelas...");
       setIsActive(true);
 
@@ -63,7 +62,7 @@ const OpenedClassManagement = () => {
       console.error("Error fetching classes:", error);
     } finally {
       setLoading(false);
-      setIsActive(false); 
+      setIsActive(false);
     }
   };
 

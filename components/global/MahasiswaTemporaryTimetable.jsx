@@ -93,7 +93,7 @@ const MahasiswaTemporaryTimetable = () => {
       ? parts[0].split("DayEnum.")[1]
       : parts[0];
 
-    return `${dayPart} ${parts[1]}`;
+    return `${parts[1]}`;
   };
 
   return (
@@ -143,8 +143,9 @@ const MahasiswaTemporaryTimetable = () => {
                     <TableHead>Mata Kuliah</TableHead>
                     <TableHead>Dosen</TableHead>
                     <TableHead>Ruangan</TableHead>
-                    <TableHead>Waktu</TableHead>
+
                     <TableHead>Tanggal Pengganti</TableHead>
+                    <TableHead>Waktu</TableHead>
 
                     <TableHead>Alasan</TableHead>
                   </TableRow>
@@ -163,7 +164,7 @@ const MahasiswaTemporaryTimetable = () => {
                         <TableCell>{temp.matakuliah}</TableCell>
                         <TableCell>{temp.dosen}</TableCell>
                         <TableCell>{temp.ruangan}</TableCell>
-                        <TableCell>{formatTimeslots(temp.schedule)}</TableCell>
+
                         <TableCell>
                           {new Date(temp.start_date).toLocaleDateString(
                             "id-ID",
@@ -175,6 +176,7 @@ const MahasiswaTemporaryTimetable = () => {
                             }
                           )}
                         </TableCell>
+                        <TableCell>{formatTimeslots(temp.schedule)}</TableCell>
                         <TableCell>{temp.change_reason || "-"}</TableCell>
                       </TableRow>
                     ))
