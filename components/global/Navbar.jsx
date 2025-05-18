@@ -19,6 +19,14 @@ export default function Navbar() {
     if (hasil) {
       try {
         const decoded = jwtDecode(hasil);
+        const now = Math.floor(Date.now() / 1000);
+
+        if (decoded.exp && decoded.exp < now) {
+          logout();
+          Cookies.remove("access_token");
+          router.replace("/login");
+          return;
+        }
         setRole(decoded.role || "guest");
       } catch (error) {
         console.error("JWT Decode Error:", error);

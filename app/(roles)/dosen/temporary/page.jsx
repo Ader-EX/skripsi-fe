@@ -152,7 +152,7 @@ const AddTemporarySchedule = () => {
 
     startDate.setHours(0, 0, 0, 0);
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 7);
+    endDate.setDate(endDate.getDate() + 3);
 
     try {
       const response = await fetch(`${API_URL}/temporary-timetable/`, {

@@ -131,12 +131,12 @@ const DosenTimetable = () => {
         </CardHeader>
         <CardContent className="p-4">
           {/* Filters */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex gap-2 mb-4 flex-col sm:flex-row">
             <Input
               placeholder="Cari berdasarkan nama atau kode mata kuliah"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="flex-1 min-w-[500px]"
+              className="flex-1 w-fit"
             />
             <Select
               value={prodiFilter}
