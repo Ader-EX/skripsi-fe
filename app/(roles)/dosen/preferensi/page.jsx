@@ -249,12 +249,24 @@ const DosenPreferensi = () => {
     return timeString.slice(0, 5);
   };
 
+  const isTimeSlotEnabled = (id, day) => {
+    if (day === "Jumat") {
+      return (id - 161) % 2 === 0;
+    }
+
+    return (id - 113) % 3 === 0;
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Preferensi Jadwal Mengajar</h1>
       <p className="text-gray-600 mb-6">
         Silakan atur preferensi jadwal mengajar Anda untuk semester ini. Anda
         dapat memilih waktu yang tersedia dan memberikan alasan jika diperlukan.
+        <br />
+        <span className="text-blue-600 font-medium">
+          Catatan: Hanya slot waktu tertentu yang dapat dipilih (setiap 3 slot).
+        </span>
       </p>
 
       <Card className="w-full">
@@ -345,6 +357,11 @@ const DosenPreferensi = () => {
                           (p) => p.timeslot_id === timeSlot.id
                         );
 
+                        const isEnabled = isTimeSlotEnabled(
+                          timeSlot.id,
+                          timeSlot.day
+                        );
+
                         return (
                           <TableCell
                             key={`${day}-${timeSlot.id}`}
@@ -357,15 +374,19 @@ const DosenPreferensi = () => {
                                     type="checkbox"
                                     checked={!!preference}
                                     onChange={(e) =>
+                                      isEnabled &&
                                       handlePreferenceClick(
                                         timeSlot.id,
                                         e.target.checked
                                       )
                                     }
+                                    disabled={!isEnabled}
                                     className={`cursor-pointer h-5 w-5 border-2 rounded-md appearance-none transition-all duration-200 
         focus:ring-0 focus:outline-none
         ${
-          preference
+          !isEnabled
+            ? "bg-gray-200 border-gray-300 cursor-not-allowed opacity-50"
+            : preference
             ? preference.is_high_priority
               ? "bg-red-500 border-red-600 hover:bg-red-600"
               : "bg-blue-500 border-blue-600 hover:bg-blue-600"
@@ -379,6 +400,11 @@ const DosenPreferensi = () => {
                                     {preference.reason
                                       ? preference.reason
                                       : "Preferensi Anda"}
+                                  </TooltipContent>
+                                )}
+                                {!isEnabled && !preference && (
+                                  <TooltipContent>
+                                    Slot waktu ini tidak tersedia untuk dipilih
                                   </TooltipContent>
                                 )}
                               </Tooltip>
