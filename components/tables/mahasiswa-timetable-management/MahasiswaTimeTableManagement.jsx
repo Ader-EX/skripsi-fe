@@ -178,6 +178,7 @@ const MahasiswaTimeTableManagement = () => {
                     <TableRow key={mahasiswa.id}>
                       <TableCell>{mahasiswa.id}</TableCell>
                       <TableCell>{mahasiswa.fullname}</TableCell>
+                      <TableCell>{mahasiswa.nim}</TableCell>
                       <TableCell>{mahasiswa.user_id}</TableCell>
                       <TableCell>
                         <Button

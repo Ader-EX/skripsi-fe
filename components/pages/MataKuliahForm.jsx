@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label"; // ✅ Import Label
+import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
@@ -123,128 +123,134 @@ const MataKuliahForm = ({
           </DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div>
-            <Label htmlFor="kodemk">Kode Mata Kuliah</Label>
-            <Input
-              id="kodemk"
-              name="kodemk"
-              value={formData.kodemk}
-              onChange={handleChange}
-              placeholder="Kode Mata Kuliah"
-              disabled={isEdit}
-            />
+          {/* Two inputs per row layout */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="kodemk">Kode Mata Kuliah</Label>
+              <Input
+                id="kodemk"
+                name="kodemk"
+                value={formData.kodemk}
+                onChange={handleChange}
+                placeholder="Kode Mata Kuliah"
+                disabled={isEdit}
+              />
+            </div>
+            <div>
+              <Label htmlFor="namamk">Nama Mata Kuliah</Label>
+              <Input
+                id="namamk"
+                name="namamk"
+                value={formData.namamk}
+                onChange={handleChange}
+                placeholder="Nama Mata Kuliah"
+              />
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="namamk">Nama Mata Kuliah</Label>
-            <Input
-              id="namamk"
-              name="namamk"
-              value={formData.namamk}
-              onChange={handleChange}
-              placeholder="Nama Mata Kuliah"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="sks">SKS</Label>
+              <Input
+                id="sks"
+                name="sks"
+                value={formData.sks}
+                onChange={handleChange}
+                type="number"
+                placeholder="SKS"
+              />
+            </div>
+            <div>
+              <Label htmlFor="smt">Semester</Label>
+              <Input
+                id="smt"
+                name="smt"
+                value={formData.smt}
+                onChange={handleChange}
+                type="number"
+                placeholder="Semester"
+              />
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="sks">SKS</Label>
-            <Input
-              id="sks"
-              name="sks"
-              value={formData.sks}
-              onChange={handleChange}
-              type="number"
-              placeholder="SKS"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="kurikulum">Kurikulum</Label>
+              <Input
+                id="kurikulum"
+                name="kurikulum"
+                value={formData.kurikulum}
+                onChange={handleChange}
+                placeholder="Kurikulum"
+              />
+            </div>
+            <div>
+              <Label htmlFor="status_mk">Status Mata Kuliah</Label>
+              <Select
+                name="status_mk"
+                value={formData.status_mk}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, status_mk: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="A">Aktif</SelectItem>
+                  <SelectItem value="N">Nonaktif</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="smt">Semester</Label>
-            <Input
-              id="smt"
-              name="smt"
-              value={formData.smt}
-              onChange={handleChange}
-              type="number"
-              placeholder="Semester"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="kurikulum">Kurikulum</Label>
-            <Input
-              id="kurikulum"
-              name="kurikulum"
-              value={formData.kurikulum}
-              onChange={handleChange}
-              placeholder="Kurikulum"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="status_mk">Status Mata Kuliah</Label>
-            <Select
-              name="status_mk"
-              value={formData.status_mk}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, status_mk: value }))
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="A">Aktif</SelectItem>
-                <SelectItem value="N">Nonaktif</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="tipe_mk">Tipe Mata Kuliah</Label>
-            <Select
-              name="tipe_mk"
-              value={formData.tipe_mk}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, tipe_mk: value }))
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih Tipe" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="T">Teori</SelectItem>
-                <SelectItem value="P">Praktikum</SelectItem>
-                <SelectItem value="S">Spesial</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="program_studi_id">Program Studi</Label>
-            <Select
-              name="program_studi_id"
-              value={formData.program_studi_id}
-              onValueChange={(value) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  program_studi_id: value,
-                  program_studi_name: programStudi.find((ps) => ps.id === value)
-                    .name,
-                }))
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih Program Studi" />
-              </SelectTrigger>
-              <SelectContent>
-                {programStudi.map((ps) => (
-                  <SelectItem key={ps.id} value={ps.id}>
-                    {ps.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="tipe_mk">Tipe Mata Kuliah</Label>
+              <Select
+                name="tipe_mk"
+                value={formData.tipe_mk}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, tipe_mk: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih Tipe" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="T">Teori</SelectItem>
+                  <SelectItem value="P">Praktikum</SelectItem>
+                  <SelectItem value="S">Spesial</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="program_studi_id">Program Studi</Label>
+              <Select
+                name="program_studi_id"
+                value={formData.program_studi_id}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    program_studi_id: value,
+                    program_studi_name: programStudi.find(
+                      (ps) => ps.id === value
+                    ).name,
+                  }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih Program Studi" />
+                </SelectTrigger>
+                <SelectContent>
+                  {programStudi.map((ps) => (
+                    <SelectItem key={ps.id} value={ps.id}>
+                      {ps.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
         <DialogFooter>

@@ -252,7 +252,7 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
             <Label htmlFor="progdi_id">Program Studi</Label>
             <Select
               required
-              value={formData.progdi_id}
+              value={formData.progdi_id.toString()}
               onValueChange={(value) => handleSelectChange(value, "progdi_id")}
             >
               <SelectTrigger className="w-full">
@@ -317,8 +317,6 @@ const DosenForm = ({ isOpen, onClose, initialData, onSubmit }) => {
               onChange={handleChange}
             />
           </div>
-
-          {/* Jabatan ID */}
 
           {/* Title Depan */}
           <div>
