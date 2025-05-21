@@ -135,6 +135,7 @@ const MahasiswaJadwal = () => {
       <div className="flex-1">
         <TimeTableView
           role="mahasiswa"
+          token={token}
           schedules={timetableData.schedules || []}
           rooms={timetableData.rooms || []}
           timeSlots={timetableData.time_slots || []}

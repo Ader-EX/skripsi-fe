@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { ExternalLinkIcon, Search } from "lucide-react";
 import toast from "react-hot-toast";
 import {
   Dialog,
@@ -135,6 +135,7 @@ const MahasiswaJadwal = () => {
       <div className="flex-1">
         <TimeTableView
           role="mahasiswa"
+          token={token}
           schedules={timetableData.schedules || []}
           rooms={timetableData.rooms || []}
           timeSlots={timetableData.time_slots || []}

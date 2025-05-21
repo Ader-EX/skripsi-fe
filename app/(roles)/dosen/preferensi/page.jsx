@@ -305,10 +305,7 @@ const DosenPreferensi = () => {
   };
 
   const isTimeSlotEnabled = (id, day) => {
-    if (!isWithinResponsePeriod) {
-      return false;
-    }
-
+    // Only check the regular pattern, ignore the response period status for display
     if (day === "Jumat") {
       return (id - 161) % 2 === 0;
     }
@@ -467,17 +464,24 @@ const DosenPreferensi = () => {
                                     checked={!!preference}
                                     onChange={(e) =>
                                       isEnabled &&
+                                      isWithinResponsePeriod &&
                                       handlePreferenceClick(
                                         timeSlot.id,
                                         e.target.checked
                                       )
                                     }
-                                    disabled={!isEnabled}
+                                    disabled={
+                                      !isEnabled || !isWithinResponsePeriod
+                                    }
                                     className={`cursor-pointer h-5 w-5 border-2 rounded-md appearance-none transition-all duration-200 
         focus:ring-0 focus:outline-none
         ${
           !isEnabled
             ? "bg-gray-200 border-gray-300 cursor-not-allowed opacity-50"
+            : !isWithinResponsePeriod && preference
+            ? preference.is_high_priority
+              ? "bg-red-500 border-red-600 opacity-90 cursor-not-allowed"
+              : "bg-blue-500 border-blue-600 opacity-90 cursor-not-allowed"
             : preference
             ? preference.is_high_priority
               ? "bg-red-500 border-red-600 hover:bg-red-600"
@@ -496,9 +500,12 @@ const DosenPreferensi = () => {
                                 )}
                                 {!isEnabled && (
                                   <TooltipContent>
-                                    {!isWithinResponsePeriod
-                                      ? "Periode pengisian preferensi telah berakhir"
-                                      : "Slot waktu ini tidak tersedia untuk dipilih"}
+                                    Slot waktu ini tidak tersedia untuk dipilih
+                                  </TooltipContent>
+                                )}
+                                {isEnabled && !isWithinResponsePeriod && (
+                                  <TooltipContent>
+                                    Periode pengisian preferensi telah berakhir
                                   </TooltipContent>
                                 )}
                               </Tooltip>

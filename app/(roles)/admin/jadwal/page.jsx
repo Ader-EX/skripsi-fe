@@ -299,6 +299,7 @@ const AdminJadwal = () => {
         </div>
         <div className="flex-1">
           <TimeTableView
+            token={token}
             schedules={timetableData.schedules || []}
             rooms={timetableData.rooms || []}
             timeSlots={timetableData.time_slots || []}

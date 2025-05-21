@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Pencil } from "lucide-react";
+import { ExternalLinkIcon, Pencil } from "lucide-react";
 
 const TimeTableView = ({
   schedules,
@@ -32,6 +32,7 @@ const TimeTableView = ({
   filters,
   role = "admin",
   selectedDay,
+  token = "",
   onDayChange = () => {},
 }) => {
   const [DAYS, setDAYS] = useState(filters?.available_days || ["Senin"]);
@@ -46,6 +47,28 @@ const TimeTableView = ({
       }
     }
   }, [filters, onDayChange, selectedDay]);
+
+  const handleExportToExcel = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/export/export-timetable-matrix`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) throw new Error("Failed to export schedules");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "jadwal_kuliah.xlsx";
+      a.click();
+    } catch (error) {
+      console.error("Error exporting schedules:", error);
+      toast.error("Gagal mengekspor jadwal");
+    }
+  };
 
   const uniqueTimeSlots = useMemo(() => {
     return timeSlots
@@ -229,37 +252,46 @@ const TimeTableView = ({
       {/* Top Controls */}
       <div className="flex p-4 border-b gap-x-4">
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-between">
-          <div className="flex gap-x-4">
-            {/* Day Selector */}
-            <Select value={selectedDay} onValueChange={onDayChange}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Select day" />
-              </SelectTrigger>
-              <SelectContent>
-                {DAYS.map((day) => (
-                  <SelectItem key={day} value={day}>
-                    {day}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {/* Building Selector */}
-            <Select
-              value={selectedBuilding}
-              onValueChange={setSelectedBuilding}
+          <div className="flex gap-x-4 w-full justify-between">
+            <div className="flex gap-x-4">
+              {/* Day Selector */}
+              <Select value={selectedDay} onValueChange={onDayChange}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Select day" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DAYS.map((day) => (
+                    <SelectItem key={day} value={day}>
+                      {day}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Building Selector */}
+              <Select
+                value={selectedBuilding}
+                onValueChange={setSelectedBuilding}
+              >
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Select building" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Buildings</SelectItem>
+                  {buildings.map((building, index) => (
+                    <SelectItem key={`${building}-${index}`} value={building}>
+                      {building}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button
+              className="bg-green-700 hover:bg-green/90"
+              onClick={handleExportToExcel}
             >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Select building" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Buildings</SelectItem>
-                {buildings.map((building, index) => (
-                  <SelectItem key={`${building}-${index}`} value={building}>
-                    {building}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              Export To Excel <ExternalLinkIcon />
+            </Button>
           </div>
           {role === "admin" && (
             <Button>
