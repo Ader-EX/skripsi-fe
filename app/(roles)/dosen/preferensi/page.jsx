@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
@@ -49,6 +49,8 @@ const DosenPreferensi = () => {
   const [selectedPreference, setSelectedPreference] = useState(null);
   const [isSpecialNeeds, setIsSpecialNeeds] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [academicPeriod, setAcademicPeriod] = useState(null);
+  const [isWithinResponsePeriod, setIsWithinResponsePeriod] = useState(false);
 
   const token = Cookies.get("access_token");
 
@@ -60,7 +62,40 @@ const DosenPreferensi = () => {
         setUserId(payload.role_id);
       }
     }
+    getActiveAcademicPeriod();
   }, []);
+
+  const getActiveAcademicPeriod = async () => {
+    try {
+      const data = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/academic-period/active`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!data.ok) {
+        throw new Error("Failed to fetch active academic period");
+      }
+      const response = await data.json();
+      setAcademicPeriod(response);
+
+      // Check if current date is within the response period
+      const currentDate = new Date();
+      const startDate = new Date(response.week_start);
+      const endDate = new Date(response.week_end);
+
+      setIsWithinResponsePeriod(
+        currentDate >= startDate && currentDate <= endDate
+      );
+    } catch (error) {
+      console.error("Error fetching academic period:", error);
+      setError("Failed to fetch academic period");
+    }
+  };
 
   useEffect(() => {
     if (userId) {
@@ -94,6 +129,11 @@ const DosenPreferensi = () => {
   };
 
   const updateSpecialNeeds = async (checked) => {
+    if (!isWithinResponsePeriod) {
+      toast.error("Periode pengisian preferensi telah berakhir");
+      return;
+    }
+
     setIsSpecialNeeds(checked);
     try {
       const response = await fetch(
@@ -145,6 +185,11 @@ const DosenPreferensi = () => {
   };
 
   const handlePreferenceClick = (timeSlotId, isChecked) => {
+    if (!isWithinResponsePeriod) {
+      toast.error("Periode pengisian preferensi telah berakhir");
+      return;
+    }
+
     const existingPref = preferences.find((p) => p.timeslot_id === timeSlotId);
 
     if (isChecked) {
@@ -156,6 +201,11 @@ const DosenPreferensi = () => {
   };
 
   const handlePreferenceChange = async (timeSlotId, prefData = {}) => {
+    if (!isWithinResponsePeriod) {
+      toast.error("Periode pengisian preferensi telah berakhir");
+      return;
+    }
+
     try {
       const existingPref = preferences.find(
         (p) => p.timeslot_id === timeSlotId
@@ -238,6 +288,11 @@ const DosenPreferensi = () => {
   };
 
   const handleSpecialNeedsChange = async (checked) => {
+    if (!isWithinResponsePeriod) {
+      toast.error("Periode pengisian preferensi telah berakhir");
+      return;
+    }
+
     if (checked) {
       setIsDialogOpen(true);
     } else {
@@ -250,6 +305,10 @@ const DosenPreferensi = () => {
   };
 
   const isTimeSlotEnabled = (id, day) => {
+    if (!isWithinResponsePeriod) {
+      return false;
+    }
+
     if (day === "Jumat") {
       return (id - 161) % 2 === 0;
     }
@@ -257,9 +316,30 @@ const DosenPreferensi = () => {
     return (id - 113) % 3 === 0;
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Preferensi Jadwal Mengajar</h1>
+
+      {!isWithinResponsePeriod && academicPeriod && (
+        <Alert className="mb-4 bg-yellow-50 border-yellow-200">
+          <AlertDescription className="text-yellow-800">
+            Periode pengisian preferensi jadwal telah berakhir atau belum
+            dimulai. Pengisian preferensi hanya tersedia pada tanggal{" "}
+            {formatDate(academicPeriod.week_start)} hingga{" "}
+            {formatDate(academicPeriod.week_end)}.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <p className="text-gray-600 mb-6">
         Silakan atur preferensi jadwal mengajar Anda untuk semester ini. Anda
         dapat memilih waktu yang tersedia dan memberikan alasan jika diperlukan.
@@ -277,8 +357,12 @@ const DosenPreferensi = () => {
                 id="special-needs"
                 checked={isSpecialNeeds}
                 onCheckedChange={handleSpecialNeedsChange}
+                disabled={!isWithinResponsePeriod}
               />
-              <Label htmlFor="special-needs">
+              <Label
+                htmlFor="special-needs"
+                className={!isWithinResponsePeriod ? "text-gray-500" : ""}
+              >
                 Apakah Anda memiliki kondisi khusus yang memerlukan penempatan
                 ruangan dekat dengan ruang dosen?
               </Label>
@@ -286,8 +370,16 @@ const DosenPreferensi = () => {
           </div>
           <CardTitle className="flex items-center justify-between">
             <span>Pilih Hari dan Waktu</span>
-            <Select value={selectedDay} onValueChange={setSelectedDay}>
-              <SelectTrigger className="w-[180px] bg-white">
+            <Select
+              value={selectedDay}
+              onValueChange={setSelectedDay}
+              disabled={!isWithinResponsePeriod}
+            >
+              <SelectTrigger
+                className={`w-[180px] ${
+                  !isWithinResponsePeriod ? "bg-gray-100" : "bg-white"
+                }`}
+              >
                 <SelectValue placeholder="Pilih hari" />
               </SelectTrigger>
               <SelectContent>
@@ -402,9 +494,11 @@ const DosenPreferensi = () => {
                                       : "Preferensi Anda"}
                                   </TooltipContent>
                                 )}
-                                {!isEnabled && !preference && (
+                                {!isEnabled && (
                                   <TooltipContent>
-                                    Slot waktu ini tidak tersedia untuk dipilih
+                                    {!isWithinResponsePeriod
+                                      ? "Periode pengisian preferensi telah berakhir"
+                                      : "Slot waktu ini tidak tersedia untuk dipilih"}
                                   </TooltipContent>
                                 )}
                               </Tooltip>

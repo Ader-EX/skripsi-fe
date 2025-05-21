@@ -1,4 +1,5 @@
 import TimeTableDashboardReadOnly from "@/components/global/TimeTableDashboardReadOnly";
+import { Button } from "@/components/ui/button";
 import React from "react";
 
 const MahasiswaTabelJadwal = () => {
@@ -6,6 +7,7 @@ const MahasiswaTabelJadwal = () => {
     <div className="p-6 flex w-full flex-col gap-6">
       <h1 className="text-2xl font-bold ">Dashboard</h1>
       <h2 className="text-xl font-semibold ">Selamat Datang</h2>
+
       <TimeTableDashboardReadOnly />
     </div>
   );

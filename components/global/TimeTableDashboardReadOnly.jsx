@@ -11,7 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import {
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  ExternalLinkIcon,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -57,6 +63,28 @@ const TimeTableDashboardReadOnly = () => {
     }
   };
 
+  const handleExportToExcel = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/export/export-timetable`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) throw new Error("Failed to export schedules");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "jadwal_kuliah.xlsx";
+      a.click();
+    } catch (error) {
+      console.error("Error exporting schedules:", error);
+      toast.error("Gagal mengekspor jadwal");
+    }
+  };
+
   useEffect(() => {
     fetchSchedules();
   }, [pageNumber, appliedFilter]);
@@ -68,8 +96,14 @@ const TimeTableDashboardReadOnly = () => {
 
   return (
     <Card className="flex flex-col w-full">
-      <CardHeader className="bg-primary/5">
-        <CardTitle>Jadwal Kuliah</CardTitle>
+      <CardHeader className="bg-primary/5 flex flex-row w-full justify-between p-4">
+        <CardTitle className="self-center">Jadwal Kuliah</CardTitle>
+        <Button
+          onClick={handleExportToExcel}
+          className="bg-green-700 hover:bg-green/90"
+        >
+          Export To Excel <ExternalLinkIcon />
+        </Button>
       </CardHeader>
       <CardContent>
         {/* Search Bar */}
